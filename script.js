@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
     brandName: "Craveessa",
     instagramUsername: "@craveessa",
     instagramLink: "https://www.instagram.com/craveessa",
-    whatsappNumber: "919999999999",
+    whatsappNumber: "9011560339",
     whatsappWelcomeMsg: "Hi Craveessa!",
     discountCodePrefix: "CRAVE50",
     baseDiscountPercent: "50%",
@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const container = document.getElementById("sprinkleCanvasContainer");
     if (!container) return;
     
-    const colors = ["#FF85A2", "#FFC857", "#A8E6CF", "#9B5DE5", "#FFD6E0"];
+    const colors = ["#4682b4", "#7fb0d6", "#f5f1e6", "#e8dcc8", "#213544"];
     const sprinkleCount = window.innerWidth < 768 ? 15 : 30;
 
     for (let i = 0; i < sprinkleCount; i++) {
@@ -310,7 +310,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const igFollowBonus = igFollowCheck && igFollowCheck.checked ? "Yes (+5% IG Follower discount requested)" : "No";
 
       // Message text builder
-      const orderMessage = `Hi Crave Essa! 🎂
+      const orderMessage = `Hi Craveessa! 🎂
 I filled out the form and unlocked my discount! Let's build my custom cake order:
 
 - Name: ${name}
@@ -346,6 +346,30 @@ Looking forward to bakes! 💖`;
         // Trigger confetti burst
         if (typeof confetti === "function") {
           triggerConfettiBurst();
+        }
+
+        // Send submission to local backend for storage/export
+        try {
+          fetch('http://localhost:3000/submit', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              fullName: name,
+              whatsappNumber: rawWaNumber,
+              email: document.getElementById("email") ? document.getElementById("email").value.trim() : "",
+              cakeSize: sizeVal,
+              flavor: flavorVal,
+              occasion: occasionVal,
+              neededBy: dateVal,
+              deliveryArea: areaVal,
+              discountCode,
+              createdAt: new Date().toISOString()
+            })
+          }).then(r => r.json()).then(data => {
+            console.log('submission saved', data);
+          }).catch(err => console.error('save submit error', err));
+        } catch (err) {
+          console.error('submit post failed', err);
         }
       }
     });
@@ -494,5 +518,126 @@ Looking forward to bakes! 💖`;
       }
     });
   });
+
+  // --- 14. Interactive Cake Building with Form ---
+  const customForm = document.getElementById("customForm");
+  const formInputs = document.querySelectorAll(".form-input");
+  const formProgress = document.getElementById("formProgress");
+  const cakeElements = document.querySelectorAll(".cake-element");
+
+  if (customForm && formInputs.length > 0) {
+    const totalSteps = 7; // Number of form fields
+    let completedSteps = 0;
+
+    // Function to update progress
+    const updateFormProgress = () => {
+      completedSteps = 0;
+      
+      formInputs.forEach((input, index) => {
+        const isValid = input.value.trim() !== "";
+        
+        if (isValid) {
+          completedSteps++;
+          input.classList.add("filled");
+        } else {
+          input.classList.remove("filled");
+        }
+      });
+
+      const progressPercent = (completedSteps / totalSteps) * 100;
+      formProgress.style.width = progressPercent + "%";
+
+      // Trigger cake layer animations based on progress
+      triggerCakeLayers(completedSteps);
+    };
+
+    // Trigger specific cake layers
+    const triggerCakeLayers = (steps) => {
+      // Hide all cake elements first
+      cakeElements.forEach(el => {
+        el.style.animationPlayState = "paused";
+        el.style.opacity = "0";
+      });
+
+      // Show layers based on completed steps
+      const layerMap = {
+        1: [".stand"], // Name entered - show stand
+        2: [".stand", ".layer.bottom"], // Phone entered - add bottom layer
+        3: [".stand", ".layer.bottom", ".cream.bottom"], // Email - add bottom cream
+        4: [".stand", ".layer.bottom", ".cream.bottom", ".layer.middle"], // Size - add middle layer
+        5: [".stand", ".layer.bottom", ".cream.bottom", ".layer.middle", ".cream.middle"], // Flavor - add middle cream
+        6: [".stand", ".layer.bottom", ".cream.bottom", ".layer.middle", ".cream.middle", ".layer.top"], // Occasion - add top layer
+        7: ".cake-element" // All fields - show entire cake fully assembled
+      };
+
+      if (steps === 7) {
+        // Show final assembled cake
+        cakeElements.forEach(el => {
+          el.style.animation = "assembledCake 6s ease-in-out infinite";
+          el.style.opacity = "1";
+        });
+      } else if (layerMap[steps]) {
+        const elementsToShow = layerMap[steps];
+        elementsToShow.forEach(selector => {
+          const elements = document.querySelectorAll(selector);
+          elements.forEach(el => {
+            el.style.animation = "none";
+            el.style.opacity = "1";
+          });
+        });
+      }
+    };
+
+    // Add event listeners to all inputs
+    formInputs.forEach(input => {
+      input.addEventListener("input", updateFormProgress);
+      input.addEventListener("change", updateFormProgress);
+      input.addEventListener("keyup", updateFormProgress);
+    });
+
+    // Form submission
+    customForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      
+      if (completedSteps === totalSteps) {
+        // Show celebration
+        showCakeCompletion();
+      }
+    });
+
+    // Show cake completion celebration
+    const showCakeCompletion = () => {
+      // Trigger confetti or celebration effect
+      if (typeof confetti === "function") {
+        confetti({
+          particleCount: 100,
+          spread: 70,
+          origin: { y: 0.6 }
+        });
+      }
+
+      alert("🎉 Your custom cake order is ready! We'll contact you shortly with design options and pricing. ✨");
+    };
+  }
+
+  // --- Animation: Assembled Cake (final state) ---
+  const style = document.createElement("style");
+  style.textContent = `
+    @keyframes assembledCake {
+      0% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+      }
+      50% {
+        transform: translate(-50%, -50%) scale(1.02);
+        opacity: 1;
+      }
+      100% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+      }
+    }
+  `;
+  document.head.appendChild(style);
 
 });

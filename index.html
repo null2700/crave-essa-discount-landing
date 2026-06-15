@@ -3,660 +3,207 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Craveessa | Get up to 50% OFF on Custom Cakes! 🎂</title>
-  <meta name="description" content="Unlock your exclusive home bakery discount code at Craveessa. Fill out the quick 30-second form to get up to 50% OFF your next custom birthday or anniversary cake!">
-  
-  <!-- Preconnect and Fonts -->
+  <title>Craveessa | Luxury Artisan Cake Atelier</title>
+  <meta name="description" content="Craveessa crafts luxurious artisan cakes with elegant design, premium flavors, and bespoke celebration experiences.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;500;600;700;800&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
-  
-  <!-- Canvas Confetti CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js" defer></script>
-  
-  <!-- Stylesheets -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-  <!-- Hidden iframe to handle Google Form submission without page redirect -->
-  <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
-
-  <!-- Floating Canvas for background sprinkles -->
-  <div id="sprinkleCanvasContainer" class="sprinkle-container"></div>
-
-  <!-- Header -->
   <header class="app-header">
-    <div class="header-container">
-      <a href="index.html" class="brand-logo">
-        <img src="assets/cakeimg.jpg" alt="Craveessa cake logo" class="brand-logo-img">
-        <span>Craveessa</span>
-      </a>
-      <a href="products.html" class="ig-handle-btn">Products</a>
-      <a href="https://www.instagram.com/craveessa" target="_blank" rel="noopener" class="ig-handle-btn" id="header-ig-link">@craveessa</a>
+    <div class="header-inner">
+      <a href="index.html" class="brand-logo">Craveessa</a>
+      <nav class="site-nav">
+        <a href="index.html#home">Home</a>
+        <a href="#about">About Us</a>
+        <a href="#faq">FAQs</a>
+        <a href="products.html">Collections</a>
+        <a href="discount.html">Discount</a>
+        <a href="#story">Our Story</a>
+      </nav>
+      <div class="header-actions">
+        <a href="tel:9011560339" class="phone-link">9011560339</a>
+        <div class="social-links" aria-label="Social media links">
+          <a href="#" aria-label="Instagram">IG</a>
+          <a href="#" aria-label="Facebook">FB</a>
+          <a href="#" aria-label="Pinterest">PT</a>
+        </div>
+      </div>
     </div>
   </header>
 
   <main>
-    <!-- 1. Hero Section -->
-    <section id="hero" class="hero-section">
-      <div class="hero-content">
-        <div class="hero-tag">🎂 Freshly Baked Happiness</div>
-        <h1 class="hero-title animate-bounce-slow">Get UP TO <span>50% OFF</span> on Your Next Cake! 🎂</h1>
-        <p class="hero-subtitle">Psst… we baked up something sweet just for you 👀 Fill this 30-second form & unlock your discount instantly!</p>
-        
-        <!-- Live Countdown Timer -->
-        <div class="timer-container" id="countdown-timer">
-          <p class="timer-label">⏰ HURRY! Flash offer ends in:</p>
-          <div class="timer-values">
-            <div class="timer-box"><span id="hours">00</span><label>Hrs</label></div>
-            <div class="timer-colon">:</div>
-            <div class="timer-box"><span id="minutes">00</span><label>Min</label></div>
-            <div class="timer-colon">:</div>
-            <div class="timer-box"><span id="seconds">00</span><label>Sec</label></div>
+    <section id="home" class="hero-section">
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <span class="eyebrow">Luxury Artisan Cakes</span>
+          <h1>Craveessa</h1>
+          <p class="hero-tagline"><span>Craveessa.</span> <span>Luxury cakes for memorable moments.</span></p>
+          <p class="hero-text">We create artisan cakes that don't just complement an occasion — they become its heart. Each creation is a combination of exquisite flavor, artful design, and tactile pleasure.</p>
+          <div class="hero-actions">
+            <a href="products.html" class="btn btn-primary">Explore Our Creations</a>
+            <a href="#story" class="btn btn-secondary">Meet the Atelier</a>
+          </div>
+          <div class="hero-meta">
+            <div>
+              <strong>Est. 2026</strong>
+              <span>Handcrafted in small batches</span>
+            </div>
+            <div>
+              <strong>White Glove Service</strong>
+              <span>Bespoke design + premium delivery</span>
+            </div>
           </div>
         </div>
 
-        <a href="#form-section" class="cta-button pulse-btn" id="hero-cta-btn">Claim My Discount →</a>
-        
-        <!-- Mini Urgency text -->
-        <p class="hero-urgency-note">⚡ Only takes 30 seconds. No spam. Just sweet savings!</p>
+        <div class="hero-visual">
+          <div class="cake-card">
+            <div class="cake-badge">Est. 2026</div>
+            <img src="https://images.unsplash.com/photo-1495214783159-3503fd1b572d?auto=format&fit=crop&w=900&q=80" alt="Luxury artisan wedding cake" class="cake-image">
+            <div class="cake-note">Hand-crafted sugar flowers · gold leaf · ivory satin finish</div>
+          </div>
+          <div class="flavor-panel">
+            <h3>Choose your color</h3>
+            <div class="flavor-grid">
+              <article class="flavor-card flavor-vanilla">
+                <span>Vanilla</span>
+              </article>
+              <article class="flavor-card flavor-chocolate">
+                <span>Chocolate</span>
+              </article>
+              <article class="flavor-card flavor-pistachio">
+                <span>Pistachio</span>
+              </article>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
 
-    <!-- 2. Discount Price Table Section -->
-    <section id="pricing" class="pricing-section">
+    <section class="promo-strip">
+      <div class="promo-card">
+        <div>
+          <span class="eyebrow">Exclusive QR Offer</span>
+          <h2>Scan the QR for a custom cake discount</h2>
+          <p>Open the discount page to unlock a fresh Craveessa code, compare cake sizes, and send your order by WhatsApp.</p>
+        </div>
+        <a href="discount.html" class="btn btn-primary">Claim Your Discount</a>
+      </div>
+    </section>
+
+    <section id="about" class="info-section">
+      <div class="info-grid">
+        <div class="info-copy">
+          <span class="eyebrow">The Atelier</span>
+          <h2>Where flavor meets quiet luxury</h2>
+          <p>Every cake is created with slow craft precision, using premium buttercream, house-made ganache, and a palette of muted blush, cream and gold. Our design language is minimal, timeless and richly tactile.</p>
+        </div>
+        <div class="info-visual">
+          <div class="story-card">
+            <p class="story-callout">"Our cakes are created to feel like keepsakes — soft, elegant and unforgettable."</p>
+            <div class="story-details">
+              <span>Signature Studio</span>
+              <span>Artisan ingredients · custom couture cakes</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="collections" class="collections-section">
       <div class="section-header">
-        <span class="section-tag">Sweet Deals</span>
-        <h2>Choose Your Size, Claim Your Slice! 🍰</h2>
-        <p>Whether it's a mini indulgence or a mega celebration, we've got you covered.</p>
+        <span class="section-label">Collections</span>
+        <h2>Signature flavors curated for unforgettable moments</h2>
       </div>
-
-      <!-- Horizontal scrolling cards -->
-      <div class="pricing-carousel-container">
-        <div class="pricing-carousel" id="pricing-carousel">
-          
-          <!-- Card 1 (250 GM) -->
-          <div class="pricing-card" data-size="250g">
-            <div class="discount-badge badge-red">50% OFF</div>
-            <div class="card-img-wrapper">
-              <img src="https://images.unsplash.com/photo-1508737027454-e6454ef45afd?w=600&auto=format&fit=crop&q=80" alt="250g Bento Cake" loading="lazy">
-            </div>
-            <div class="card-info">
-              <h3>250 GM Cake</h3>
-              <p class="card-desc">Perfect Bento / Cute Single Dessert</p>
-              <div class="card-price">
-                <span class="orig-price">₹450</span>
-                <span class="disc-price">₹225</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Card 2 (500 GM) - Most Popular -->
-          <div class="pricing-card popular" data-size="500g">
-            <div class="discount-badge badge-orange">44% OFF</div>
-            <div class="popular-ribbon">MOST POPULAR ⭐</div>
-            <div class="card-img-wrapper">
-              <img src="https://images.unsplash.com/photo-1518047601542-79f18c655718?w=600&auto=format&fit=crop&q=80" alt="500g Celebration Cake" loading="lazy">
-            </div>
-            <div class="card-info">
-              <h3>500 GM Cake</h3>
-              <p class="card-desc">Ideal for small families & get-togethers</p>
-              <div class="card-price">
-                <span class="orig-price">₹800</span>
-                <span class="disc-price">₹450</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Card 3 (1 KG) - Highlighted -->
-          <div class="pricing-card popular" data-size="1kg">
-            <div class="discount-badge badge-orange">40% OFF</div>
-            <div class="popular-ribbon">PARTY FAVORITE 🎉</div>
-            <div class="card-img-wrapper">
-              <img src="https://images.unsplash.com/photo-1588195538326-c5b1e9f80a1b?w=600&auto=format&fit=crop&q=80" alt="1 KG Celebration Cake" loading="lazy">
-            </div>
-            <div class="card-info">
-              <h3>1 KG Cake</h3>
-              <p class="card-desc">Standard size for birthdays & events</p>
-              <div class="card-price">
-                <span class="orig-price">₹1,500</span>
-                <span class="disc-price">₹900</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Card 4 (2 KG) -->
-          <div class="pricing-card" data-size="2kg">
-            <div class="discount-badge badge-violet">33% OFF</div>
-            <div class="card-img-wrapper">
-              <img src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=600&auto=format&fit=crop&q=80" alt="2 KG Custom Cake" loading="lazy">
-            </div>
-            <div class="card-info">
-              <h3>2 KG Cake</h3>
-              <p class="card-desc">Double decker / customized theme cake</p>
-              <div class="card-price">
-                <span class="orig-price">₹3,000</span>
-                <span class="disc-price">₹2,000</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Card 5 (3 KG) -->
-          <div class="pricing-card" data-size="3kg">
-            <div class="discount-badge badge-violet">33% OFF</div>
-            <div class="card-img-wrapper">
-              <img src="https://images.unsplash.com/photo-1562266648-6607e944c3c9?w=600&auto=format&fit=crop&q=80" alt="3 KG Celebration Cake" loading="lazy">
-            </div>
-            <div class="card-info">
-              <h3>3 KG Cake</h3>
-              <p class="card-desc">Elegant anniversary or mid-size events</p>
-              <div class="card-price">
-                <span class="orig-price">₹4,500</span>
-                <span class="disc-price">₹3,000</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Card 6 (5 KG) -->
-          <div class="pricing-card" data-size="5kg">
-            <div class="discount-badge badge-pink">29% OFF</div>
-            <div class="card-img-wrapper">
-              <img src="https://images.unsplash.com/photo-1535141192574-5d4897c13636?w=600&auto=format&fit=crop&q=80" alt="5 KG Grand Cake" loading="lazy">
-            </div>
-            <div class="card-info">
-              <h3>5 KG Cake</h3>
-              <p class="card-desc">Grand multi-tier wedding / milestone cake</p>
-              <div class="card-price">
-                <span class="orig-price">₹7,000</span>
-                <span class="disc-price">₹5,000</span>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </div>
-      <div class="carousel-hint">← Swipe to view all sizes →</div>
-    </section>
-
-    <!-- 3. How It Works Section -->
-    <section id="how-it-works" class="how-section">
-      <div class="section-header">
-        <span class="section-tag">Easy Peasy</span>
-        <h2>How to Claim in 3 Steps 🚀</h2>
-      </div>
-
-      <div class="steps-grid">
-        <div class="step-item">
-          <div class="step-num">1</div>
-          <div class="step-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
-            </svg>
-          </div>
-          <h3>Fill the Quiz</h3>
-          <p>Complete the quick 30-second form below with your cake preferences.</p>
-        </div>
-
-        <div class="step-item">
-          <div class="step-num">2</div>
-          <div class="step-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <rect x="2" y="4" width="20" height="16" rx="2" ry="2"/>
-              <path d="M12 11V3M12 21v-4m-6-3h12"/>
-            </svg>
-          </div>
-          <h3>Get Code Instantly</h3>
-          <p>A unique coupon code will pop up on your screen & be sent to you.</p>
-        </div>
-
-        <div class="step-item">
-          <div class="step-num">3</div>
-          <div class="step-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-            </svg>
-          </div>
-          <h3>Redeem via DM/WA</h3>
-          <p>Share your code when ordering on WhatsApp or Instagram DM to get discount!</p>
-        </div>
+      <div class="collection-grid">
+        <article class="collection-card">
+          <div class="card-image card-vanilla"></div>
+          <h3>Vanilla Veil</h3>
+          <p>Silken vanilla sponge with champagne buttercream, dusted with edible gold and blush petals.</p>
+        </article>
+        <article class="collection-card">
+          <div class="card-image card-chocolate"></div>
+          <h3>Midnight Truffle</h3>
+          <p>Dark chocolate mousse layered with praline and smoked sea salt, finished in cream ivory.</p>
+        </article>
+        <article class="collection-card">
+          <div class="card-image card-pistachio"></div>
+          <h3>Blush Pistachio</h3>
+          <p>Pistachio sponge with rosewater cream, gold leaf accents, and a soft blush floral touch.</p>
+        </article>
       </div>
     </section>
 
-    <!-- 4. Lead Capture Form Section -->
-    <section id="form-section" class="form-section">
-      <div class="form-card-container">
-        <div class="form-card">
-          <div class="form-header">
-            <h2>Let's Bake Your Deal! 🧁</h2>
-            <p>Tell us a bit about your upcoming event, and we'll whip up your custom discount.</p>
-            
-            <!-- Quiz Progress bar -->
-            <div class="quiz-progress-container">
-              <div class="quiz-progress-bar" id="quiz-progress-bar"></div>
-              <div class="quiz-progress-text" id="quiz-progress-text">Mixing ingredients... 33%</div>
+    <section id="story" class="designer-section">
+      <div class="designer-grid">
+        <div class="designer-visual">
+          <div class="chef-card">
+            <div class="chef-image"></div>
+            <div class="chef-copy">
+              <span class="eyebrow">Meet the Pastry Chef</span>
+              <h3>Chef Srushti Jagtap</h3>
+              <p>A refined pastry artist guiding luxury celebrations with precision, warmth and calm confidence.</p>
+              <a href="tel:9011560339" class="btn btn-accent">Schedule a Call</a>
             </div>
-          </div>
-
-          <form id="discountForm" method="POST" target="hidden_iframe">
-            
-            <!-- STEP 1: Basic Info -->
-            <div class="form-step active" data-step="1">
-              <div class="input-group">
-                <label for="fullName">What's your name? 💖</label>
-                <input type="text" id="fullName" placeholder="Your Sweet Name" required>
-                <div class="error-msg">Please enter your name</div>
-              </div>
-
-              <div class="input-group">
-                <label for="whatsappNumber">WhatsApp Number (For sending discount) 📱</label>
-                <div class="phone-input-wrapper">
-                  <span class="phone-prefix">+91</span>
-                  <input type="tel" id="whatsappNumber" placeholder="98765 43210" pattern="[0-9]{10}" required>
-                </div>
-                <small class="input-hint">We'll text you the discount code & design inspirations!</small>
-                <div class="error-msg">Please enter a valid 10-digit WhatsApp number</div>
-              </div>
-
-              <div class="input-group">
-                <label for="email">Email Address (Optional) 📧</label>
-                <input type="email" id="email" placeholder="sweetheart@example.com">
-                <div class="error-msg">Please enter a valid email address</div>
-              </div>
-
-              <div class="form-actions">
-                <button type="button" class="btn btn-next" data-next="2">Next Step: Cake Details 🍰</button>
-              </div>
-            </div>
-
-            <!-- STEP 2: Cake Details -->
-            <div class="form-step" data-step="2">
-              
-              <!-- Cake Size buttons selector -->
-              <div class="input-group">
-                <label>Which cake size are you eyeing? 👀</label>
-                <div class="size-btn-grid">
-                  <button type="button" class="size-select-btn" data-val="250g">250 GM</button>
-                  <button type="button" class="size-select-btn" data-val="500g">500 GM</button>
-                  <button type="button" class="size-select-btn active" data-val="1kg">1 KG</button>
-                  <button type="button" class="size-select-btn" data-val="2kg">2 KG</button>
-                  <button type="button" class="size-select-btn" data-val="3kg">3 KG</button>
-                  <button type="button" class="size-select-btn" data-val="5kg">5 KG</button>
-                </div>
-                <!-- Hidden input for form serialization -->
-                <input type="hidden" id="cakeSize" value="1kg">
-              </div>
-
-              <div class="input-group">
-                <label for="flavor">Preferred Flavor 🍫</label>
-                <select id="flavor">
-                  <option value="Chocolate" selected>Chocolate (Highly Recommended! 🤤)</option>
-                  <option value="Vanilla">Vanilla Classic</option>
-                  <option value="Red Velvet">Royal Red Velvet</option>
-                  <option value="Black Forest">Classic Black Forest</option>
-                  <option value="Butterscotch">Butterscotch Crunch</option>
-                  <option value="Pineapple">Tangy Pineapple</option>
-                  <option value="Other">Other Flavor (Tell us in DM!)</option>
-                </select>
-              </div>
-
-              <div class="input-group">
-                <label for="occasion">What's the occasion? 🎉</label>
-                <select id="occasion">
-                  <option value="Birthday" selected>Birthday Bash 🎂</option>
-                  <option value="Anniversary">Romantic Anniversary 💖</option>
-                  <option value="Wedding">Dreamy Wedding 💍</option>
-                  <option value="Just Because">Just Because (Cake is life!) 🤤</option>
-                  <option value="Other">Other Celebration</option>
-                </select>
-              </div>
-
-              <div class="input-group">
-                <label for="neededBy">When is the celebration? 📅</label>
-                <input type="date" id="neededBy" required>
-                <div class="error-msg">Please pick a date</div>
-              </div>
-
-              <div class="form-actions split">
-                <button type="button" class="btn btn-prev" data-prev="1">← Back</button>
-                <button type="button" class="btn btn-next" data-next="3">Next: Delivery & Submit 🚀</button>
-              </div>
-            </div>
-
-            <!-- STEP 3: Logistics & Extra Discount -->
-            <div class="form-step" data-step="3">
-              
-              <div class="input-group">
-                <label for="deliveryArea">Delivery Area / Pincode in Bangalore 📍</label>
-                <input type="text" id="deliveryArea" placeholder="e.g. Indiranagar, 560038" required>
-                <div class="error-msg">Please specify your delivery area or pincode</div>
-              </div>
-
-              <!-- Ordered before? Toggle -->
-              <div class="input-group">
-                <label>Have you ordered from Crave Essa before? 🥺</label>
-                <div class="toggle-wrapper">
-                  <span class="toggle-label">No, first time!</span>
-                  <label class="switch">
-                    <input type="checkbox" id="orderedBefore">
-                    <span class="slider round"></span>
-                  </label>
-                  <span class="toggle-label">Yes, I'm back!</span>
-                </div>
-              </div>
-
-              <!-- Instagram checkbox for extra 5% off -->
-              <div class="instagram-discount-box">
-                <label class="checkbox-container">
-                  <input type="checkbox" id="instagramFollowed">
-                  <span class="checkmark"></span>
-                  <span class="checkbox-label">
-                    Follow <a href="https://www.instagram.com/craveessa" target="_blank" rel="noopener">@craveessa</a> on Instagram for an <strong>EXTRA 5% off</strong>? 🥳
-                  </span>
-                </label>
-              </div>
-
-              <div class="form-actions split">
-                <button type="button" class="btn btn-prev" data-prev="2">← Back</button>
-                <button type="submit" class="btn btn-submit" id="submitFormBtn">Unlock My Discount! 🧁</button>
-              </div>
-            </div>
-
-          </form>
-        </div>
-      </div>
-    </section>
-
-    <!-- 5. Marketing Add-ons -->
-
-    <!-- Social Proof strip (scrolling marquee) -->
-    <section class="social-proof-strip">
-      <div class="marquee-title">❤️ Loved by Pune's Sweetest Dessert Fans</div>
-      <div class="marquee-container">
-        <div class="marquee-content" id="marquee-content-1">
-          <div class="testimonial-card">
-            <span class="stars">⭐⭐⭐⭐⭐</span>
-            <p>"Absolutely loved this place! Beautiful ambience, super fresh Cakes, and the brownies are rich. Everything tastes as good as it looks. A must-visit for dessert lovers."</p>
-            <div class="customer-info">Take out · Dinner · ₹200–400 · Food 5 · Service 5 · Atmosphere 5</div>
-            <div class="customer-info">- Manish Nikam · Pune</div>
-          </div>
-          <div class="testimonial-card">
-            <span class="stars">⭐⭐⭐⭐⭐</span>
-            <p>"Amazing Experience with delicious taste....must try specially if you are an absolute pastry lover.😁"</p>
-            <div class="customer-info">Food 5 · Service 5 · Atmosphere 5</div>
-            <div class="customer-info">- Soumitra Ghosh · Pune</div>
-          </div>
-          <div class="testimonial-card">
-            <span class="stars">⭐⭐⭐⭐⭐</span>
-            <p>"The cakes n pastries are fresh n soft. The sugar is perfectly balanced. Quality of ingredients used are spot on. Will surely recommend to my friends n family."</p>
-            <div class="customer-info">2 reviews · Pune</div>
-            <div class="customer-info">- Chetan Abhang</div>
-          </div>
-          <div class="testimonial-card">
-            <span class="stars">⭐⭐⭐⭐⭐</span>
-            <p>"Besttt, classy, and absolutely delicious! Fresh bakes, beautiful presentation, and amazing taste. Highly recommend!"</p>
-            <div class="customer-info">Dine in · Lunch · Food 5 · Service 5 · Atmosphere 5</div>
-            <div class="customer-info">- Soham Gurav · Pune</div>
-          </div>
-          <div class="testimonial-card">
-            <span class="stars">⭐⭐⭐⭐⭐</span>
-            <p>"Craveessa Cafe serves the most irresistible cookies and pastries, baked fresh with rich flavors in every bite. If you're a dessert lover, this is the ultimate spot to satisfy your sweet cravings!🍪✨"</p>
-            <div class="customer-info">Local Guide · 12 reviews · 2 photos · Pune</div>
-            <div class="customer-info">- Sharvari Labhasetwar</div>
-          </div>
-          <div class="testimonial-card">
-            <span class="stars">⭐⭐⭐⭐⭐</span>
-            <p>"This is the best bakery for cakes and pastries. The quality and taste is just amazing 😍😍 and especially the brownies — they are just heaven 😍😍"</p>
-            <div class="customer-info">7 reviews · Pune</div>
-            <div class="customer-info">- Aparna Chavan</div>
-          </div>
-          <div class="testimonial-card">
-            <span class="stars">⭐⭐⭐⭐⭐</span>
-            <p>"Loved it!! Tried their Cocopine cake and it’s an absolute must try. Highly recommend!"</p>
-            <div class="customer-info">Local Guide · 9 reviews · Pune</div>
-            <div class="customer-info">- Prajakta Pansare</div>
-          </div>
-          <div class="testimonial-card">
-            <span class="stars">⭐⭐⭐⭐⭐</span>
-            <p>"Craveessa bakery never disappoints! The Nutella cookies were heavenly and full of flavor, and the pineapple cake was moist and perfectly sweet. A must-try place for dessert lovers!"</p>
-            <div class="customer-info">9 reviews · Pune</div>
-            <div class="customer-info">- Siddhi Nahar</div>
-          </div>
-          <div class="testimonial-card">
-            <span class="stars">⭐⭐⭐⭐⭐</span>
-            <p>"Great taste and quality. Will definitely visit again!"</p>
-            <div class="customer-info">3 reviews · Pune</div>
-            <div class="customer-info">- Netra Zade</div>
-          </div>
-          <div class="testimonial-card">
-            <span class="stars">⭐⭐⭐⭐⭐</span>
-            <p>"Brownies and cookies are to die for!! Best and only place for desserts🫶🏻!!"</p>
-            <div class="customer-info">Dine in · Take out · Pune</div>
-            <div class="customer-info">- Om More · 6 reviews</div>
           </div>
         </div>
-        <!-- Duplicate for seamless scrolling -->
-        <div class="marquee-content" id="marquee-content-2">
-          <div class="testimonial-card">
-            <span class="stars">⭐⭐⭐⭐⭐</span>
-            <p>"Absolutely loved this place! Beautiful ambience, super fresh Cakes, and the brownies are rich. Everything tastes as good as it looks. A must-visit for dessert lovers."</p>
-            <div class="customer-info">Take out · Dinner · ₹200–400 · Food 5 · Service 5 · Atmosphere 5</div>
-            <div class="customer-info">- Manish Nikam · Pune</div>
-          </div>
-          <div class="testimonial-card">
-            <span class="stars">⭐⭐⭐⭐⭐</span>
-            <p>"Amazing Experience with delicious taste....must try specially if you are an absolute pastry lover.😁"</p>
-            <div class="customer-info">Food 5 · Service 5 · Atmosphere 5</div>
-            <div class="customer-info">- Soumitra Ghosh · Pune</div>
-          </div>
-          <div class="testimonial-card">
-            <span class="stars">⭐⭐⭐⭐⭐</span>
-            <p>"The cakes n pastries are fresh n soft. The sugar is perfectly balanced. Quality of ingredients used are spot on. Will surely recommend to my friends n family."</p>
-            <div class="customer-info">2 reviews · Pune</div>
-            <div class="customer-info">- Chetan Abhang</div>
-          </div>
-          <div class="testimonial-card">
-            <span class="stars">⭐⭐⭐⭐⭐</span>
-            <p>"Besttt, classy, and absolutely delicious! Fresh bakes, beautiful presentation, and amazing taste. Highly recommend!"</p>
-            <div class="customer-info">Dine in · Lunch · Food 5 · Service 5 · Atmosphere 5</div>
-            <div class="customer-info">- Soham Gurav · Pune</div>
-          </div>
-          <div class="testimonial-card">
-            <span class="stars">⭐⭐⭐⭐⭐</span>
-            <p>"Craveessa Cafe serves the most irresistible cookies and pastries, baked fresh with rich flavors in every bite. If you're a dessert lover, this is the ultimate spot to satisfy your sweet cravings!🍪✨"</p>
-            <div class="customer-info">Local Guide · 12 reviews · 2 photos · Pune</div>
-            <div class="customer-info">- Sharvari Labhasetwar</div>
-          </div>
-          <div class="testimonial-card">
-            <span class="stars">⭐⭐⭐⭐⭐</span>
-            <p>"This is the best bakery for cakes and pastries. The quality and taste is just amazing 😍😍 and especially the brownies — they are just heaven 😍😍"</p>
-            <div class="customer-info">7 reviews · Pune</div>
-            <div class="customer-info">- Aparna Chavan</div>
-          </div>
-          <div class="testimonial-card">
-            <span class="stars">⭐⭐⭐⭐⭐</span>
-            <p>"Loved it!! Tried their Cocopine cake and it’s an absolute must try. Highly recommend!"</p>
-            <div class="customer-info">Local Guide · 9 reviews · Pune</div>
-            <div class="customer-info">- Prajakta Pansare</div>
-          </div>
-          <div class="testimonial-card">
-            <span class="stars">⭐⭐⭐⭐⭐</span>
-            <p>"Craveessa bakery never disappoints! The Nutella cookies were heavenly and full of flavor, and the pineapple cake was moist and perfectly sweet. A must-try place for dessert lovers!"</p>
-            <div class="customer-info">9 reviews · Pune</div>
-            <div class="customer-info">- Siddhi Nahar</div>
-          </div>
-          <div class="testimonial-card">
-            <span class="stars">⭐⭐⭐⭐⭐</span>
-            <p>"Great taste and quality. Will definitely visit again!"</p>
-            <div class="customer-info">3 reviews · Pune</div>
-            <div class="customer-info">- Netra Zade</div>
-          </div>
-          <div class="testimonial-card">
-            <span class="stars">⭐⭐⭐⭐⭐</span>
-            <p>"Brownies and cookies are to die for!! Best and only place for desserts🫶🏻!!"</p>
-            <div class="customer-info">Dine in · Take out · Pune</div>
-            <div class="customer-info">- Om More · 6 reviews</div>
+        <div class="designer-copy">
+          <span class="eyebrow">Crafted for weddings & intimate moments</span>
+          <h2>Let's design your dream cake together</h2>
+          <p>From palette and texture to scent and centerpieces, every detail is considered. Our studio supports bespoke consultations, delivery planning, and elegant packaging.</p>
+          <div class="feature-list">
+            <div><strong>•</strong> Private design consultation</div>
+            <div><strong>•</strong> Delivered with care</div>
+            <div><strong>•</strong> Floral styling + gold leaf finishing</div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Instagram CTA Banner -->
-    <section class="instagram-cta-section">
-      <div class="ig-card">
-        <div class="ig-icon">📸</div>
-        <h3>Join our Cake Community!</h3>
-        <p>Follow @craveessa for daily cake designs, baking behind-the-scenes, and flash giveaways!</p>
-        <a href="https://www.instagram.com/craveessa" target="_blank" rel="noopener" class="ig-follow-big-btn">Follow @craveessa on IG</a>
+    <section id="faq" class="faq-section">
+      <div class="faq-header">
+        <span class="section-label">FAQs</span>
+        <h2>Questions from couples and hosts</h2>
+      </div>
+      <div class="faq-grid">
+        <article class="faq-card">
+          <h3>How far in advance should I book?</h3>
+          <p>We recommend 2–3 weeks for custom wedding cakes. For express celebrations, call us and we’ll do our best to accommodate.</p>
+        </article>
+        <article class="faq-card">
+          <h3>Do you offer tastings?</h3>
+          <p>Yes. Tastings are available by appointment and include our signature vanilla, chocolate, and pistachio selections.</p>
+        </article>
+        <article class="faq-card">
+          <h3>Can the cake match my wedding palette?</h3>
+          <p>Absolutely. We tailor finishes, sugar flowers, and gilded details to create a seamless look for your event.</p>
+        </article>
       </div>
     </section>
 
-    <!-- Referral Banner -->
-    <section class="referral-banner-section">
-      <div class="referral-card">
-        <h3>Sharing is Caring (and Saves Money!) 👭</h3>
-        <p>Refer a friend! Both of you get an <strong>EXTRA 10% OFF</strong> your next orders.</p>
-        <a href="#" id="referral-wa-link" target="_blank" rel="noopener" class="referral-btn">
-          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.335-1.662c1.746.953 3.71 1.458 5.704 1.459h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/>
-          </svg>
-          Share on WhatsApp
-        </a>
-      </div>
-    </section>
-
-    <!-- FAQ Accordion -->
-    <section class="faq-section">
-      <div class="section-header">
-        <span class="section-tag">Got Questions?</span>
-        <h2>Frequently Asked Questions 🤔</h2>
-      </div>
-
-      <div class="faq-accordion">
-        <div class="faq-item">
-          <button class="faq-toggle" aria-expanded="false">
-            <span>📍 What areas in Bangalore do you deliver to?</span>
-            <span class="icon">+</span>
-          </button>
-          <div class="faq-content">
-            <p>We deliver across central & eastern parts of Bangalore (including Indiranagar, HSR Layout, Koramangala, Whitefield, Domlur, MG Road, etc.). Minimum order value might apply depending on distance. Self-pickup is also available!</p>
-          </div>
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <span>Craveessa</span>
+          <p>Artisan cakes with a quiet luxury spirit.</p>
         </div>
-
-        <div class="faq-item">
-          <button class="faq-toggle" aria-expanded="false">
-            <span>⏰ How much advance notice do you need?</span>
-            <span class="icon">+</span>
-          </button>
-          <div class="faq-content">
-            <p>We love baking perfection! For custom theme cakes, we require at least 24-48 hours notice. For urgent bento cake orders, ping us directly and we'll try our best to squeeze you in!</p>
+        <div class="footer-links">
+          <div class="footer-social">
+            <span>Follow us</span>
+            <div>
+              <a href="#" aria-label="Instagram">Instagram</a>
+              <a href="#" aria-label="Facebook">Facebook</a>
+              <a href="#" aria-label="Pinterest">Pinterest</a>
+            </div>
           </div>
-        </div>
-
-        <div class="faq-item">
-          <button class="faq-toggle" aria-expanded="false">
-            <span>🎨 Can you customize cake designs or flavors?</span>
-            <span class="icon">+</span>
-          </button>
-          <div class="faq-content">
-            <p>Yes, absolutely! Customizing is our specialty. You can share your design ideas, color palettes, and flavor combinations via Instagram DMs or WhatsApp, and we'll translate it into cake art.</p>
-          </div>
-        </div>
-
-        <div class="faq-item">
-          <button class="faq-toggle" aria-expanded="false">
-            <span>💳 What payment methods do you accept?</span>
-            <span class="icon">+</span>
-          </button>
-          <div class="faq-content">
-            <p>We accept all major UPI platforms (GPay, PhonePe, Paytm), Netbanking, and Bank Transfers. We require a 50% advance to confirm your order slot.</p>
+          <div class="footer-contact">
+            <span>Contact</span>
+            <a href="tel:9011560339">9011560339</a>
           </div>
         </div>
       </div>
-    </section>
+    </footer>
   </main>
-
-  <!-- Sticky Bottom Urgency Bar (Mobile & Desktop) -->
-  <div class="sticky-urgency-bar" id="urgency-bar">
-    <div class="urgency-content">
-      <span>🎉 Flash Offer: Valid for the next <strong id="customers-left">14</strong> customers only — don't miss out!</span>
-      <div class="urgency-actions">
-        <a href="#form-section" class="urgency-claim-btn">Claim Now!</a>
-        <button class="urgency-close" id="close-urgency-btn">&times;</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Floating WhatsApp Button -->
-  <a href="#" class="floating-wa-btn" id="floating-wa" target="_blank" rel="noopener" aria-label="Chat with Crave Essa on WhatsApp">
-    <span class="floating-wa-badge">Online</span>
-    <svg viewBox="0 0 24 24" width="30" height="30" fill="currentColor">
-      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.335-1.662c1.746.953 3.71 1.458 5.704 1.459h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/>
-    </svg>
-  </a>
-
-  <!-- Footer -->
-  <footer class="app-footer">
-    <div class="footer-container">
-      <div class="footer-logo">
-        <img src="assets/cakeimg.jpg" alt="Craveessa cake logo" class="footer-logo-img">
-        <span>Craveessa</span>
-      </div>
-      <p class="footer-tagline">Making your celebrations a whole lot sweeter!</p>
-      <div class="footer-socials">
-        <a href="https://www.instagram.com/craveessa" target="_blank" rel="noopener">Instagram</a>
-        <a href="#" id="footer-wa-link" target="_blank" rel="noopener">WhatsApp</a>
-      </div>
-      <div class="footer-areas"><a href="https://maps.app.goo.gl/rs3uWCRPh6fMpWcV9" target="_blank" rel="noopener">📍 Serving: Pune and nearby neighbourhoods.</a></div>
-      <p class="owner-credit">Owned and created by Srushti Jagtap.</p>
-      <div class="footer-copyright">
-        &copy; 2026 Craveessa. All rights reserved.<br>
-        Made with ❤️ for sweet lovers.
-      </div>
-    </div>
-  </footer>
-
-  <!-- 6. Success Modal (Discount Reveal) -->
-  <div id="successModal" class="modal-overlay">
-    <div class="modal-card">
-      <div class="modal-confetti-emoji">🎉🎂🧁</div>
-      <h2>Sweet Victory! 🥳</h2>
-      <p class="modal-subtitle">Your exclusive discount code is ready. Take a screenshot now!</p>
-      
-      <div class="discount-display-box">
-        <span class="discount-code" id="revealed-code">CRAVE50-W9X2</span>
-        <button class="copy-code-btn" id="copy-code-btn" aria-label="Copy discount code">
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
-            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
-            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
-          </svg>
-          Copy Code
-        </button>
-      </div>
-
-      <p class="modal-success-highlight">Save this code & click below to order!</p>
-
-      <div class="modal-actions-container">
-        <!-- Order on WhatsApp button -->
-        <a href="#" class="order-action-btn wa-action-btn" id="modal-wa-order-btn" target="_blank" rel="noopener">
-          <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
-            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.335-1.662c1.746.953 3.71 1.458 5.704 1.459h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/>
-          </svg>
-          Order on WhatsApp
-        </a>
-
-        <!-- Order on Instagram DM button -->
-        <a href="https://www.instagram.com/craveessa" class="order-action-btn ig-action-btn" id="modal-ig-order-btn" target="_blank" rel="noopener">
-          📸 Order on Instagram DM
-        </a>
-      </div>
-
-      <button class="modal-close-btn" id="modal-close-btn">Done, back to site</button>
-    </div>
-  </div>
-
-  <!-- Main script files -->
-  <script src="config.js"></script>
-  <script src="script.js"></script>
 </body>
 </html>

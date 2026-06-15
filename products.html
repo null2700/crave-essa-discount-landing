@@ -3,102 +3,112 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Craveessa Products | Shop All Cakes & Pastries</title>
+  <title>Craveessa | Collections</title>
+  <meta name="description" content="Explore the signature collections from Craveessa, the luxury artisan cake atelier for weddings, celebrations, and bespoke events.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <header class="app-header">
-    <div class="header-container">
+    <div class="header-inner">
       <a href="index.html" class="brand-logo">
-        <img src="assets/cakeimg.jpg" alt="Craveessa cake logo" class="brand-logo-img">
-        <span>Craveessa</span>
+        <span class="brand-mark">Crave</span>
+        <span class="brand-text">essa</span>
       </a>
-      <a href="products.html" class="ig-handle-btn">Products</a>
-      <a href="https://www.instagram.com/craveessa" target="_blank" rel="noopener" class="ig-handle-btn">@craveessa</a>
+      <nav class="site-nav">
+        <a href="index.html#home">Home</a>
+        <a href="index.html#about">About Us</a>
+        <a href="index.html#faq">FAQs</a>
+        <a href="products.html">Collections</a>
+        <a href="discount.html">Discount</a>
+        <a href="index.html#story">Our Story</a>
+      </nav>
+      <div class="header-actions">
+        <a href="tel:9011560339" class="phone-link">9011560339</a>
+        <div class="social-links" aria-label="Social media links">
+          <a href="#" aria-label="Instagram">IG</a>
+          <a href="#" aria-label="Facebook">FB</a>
+          <a href="#" aria-label="Pinterest">PT</a>
+        </div>
+      </div>
     </div>
   </header>
 
   <main>
-    <section class="section-header shop-hero">
-      <span class="section-tag">Our Shop</span>
-      <h2>All Products Available at Craveessa</h2>
-      <p>Browse our full menu of cakes, pastries, cookies, and party desserts.</p>
-      <div class="shop-banner">
-        <img src="assets/cakefront.png" alt="Craveessa cake front storefront" class="shop-banner-img">
+    <section class="hero-section hero-small">
+      <div class="hero-grid hero-collection-grid">
+        <div class="hero-copy">
+          <span class="eyebrow">Curated Collections</span>
+          <h1>Signature cakes for every occasion</h1>
+          <p>Discover the refined flavors and elevated finishes that define Craveessa.</p>
+          <a href="tel:9011560339" class="btn btn-primary">Schedule a Consultation</a>
+        </div>
+        <div class="hero-visual hero-collection-visual">
+          <img src="https://images.unsplash.com/photo-1520201163981-ec32d32fb10a?auto=format&fit=crop&w=900&q=80" alt="Luxury cake collection" class="hero-collection-image">
+        </div>
       </div>
     </section>
 
-    <section class="products-section">
-      <div class="product-grid">
-        <article class="product-card">
-          <div class="product-image" style="background-image:url('https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=800&auto=format&fit=crop&q=80');"></div>
-          <div class="product-content">
-            <h3>Classic Chocolate Cake</h3>
-            <p>Rich, moist chocolate cake topped with silky ganache and fresh berries.</p>
-            <div class="product-meta">From ₹899</div>
-          </div>
+    <section class="collections-section collections-page">
+      <div class="section-header">
+        <span class="section-label">Taste & Texture</span>
+        <h2>Elegant collections designed for memorable celebrations</h2>
+      </div>
+      <div class="collection-grid">
+        <article class="collection-card">
+          <div class="card-image card-vanilla"></div>
+          <h3>Vanilla Veil</h3>
+          <p>Soft vanilla sponge with champagne buttercream, finished with gold leaf and delicate florals.</p>
         </article>
-        <article class="product-card">
-          <div class="product-image" style="background-image:url('https://images.unsplash.com/photo-1512058564366-c9e4b0b77920?w=800&auto=format&fit=crop&q=80');"></div>
-          <div class="product-content">
-            <h3>Red Velvet Cake</h3>
-            <p>Decadent red velvet with cream cheese frosting, perfect for celebrations.</p>
-            <div class="product-meta">From ₹999</div>
-          </div>
+        <article class="collection-card">
+          <div class="card-image card-chocolate"></div>
+          <h3>Midnight Truffle</h3>
+          <p>Dark chocolate sponge layered with praline mousse, sea salt petals, and rich ganache.</p>
         </article>
-        <article class="product-card">
-          <div class="product-image" style="background-image:url('https://images.unsplash.com/photo-1542838132-92c53300491e?w=800&auto=format&fit=crop&q=80');"></div>
-          <div class="product-content">
-            <h3>Cocopine Cake</h3>
-            <p>Exotic coconut and pineapple cake with a tropical flavour punch.</p>
-            <div class="product-meta">From ₹875</div>
-          </div>
+        <article class="collection-card">
+          <div class="card-image card-pistachio"></div>
+          <h3>Blush Pistachio</h3>
+          <p>Pistachio sponge with rosewater cream, ivory frosting, and blush sugar blossoms.</p>
         </article>
-        <article class="product-card">
-          <div class="product-image" style="background-image:url('https://images.unsplash.com/photo-1505253216768-6c2ce7e26f13?w=800&auto=format&fit=crop&q=80');"></div>
-          <div class="product-content">
-            <h3>Nutella Cookies</h3>
-            <p>Golden-baked cookies stuffed with creamy Nutella filling.</p>
-            <div class="product-meta">Pack of 6 from ₹350</div>
-          </div>
+      </div>
+
+      <div class="secondary-grid">
+        <article class="detail-card">
+          <span class="detail-title">Custom Couture Cakes</span>
+          <p>Each design is tailored to your wedding theme, color palette and atmosphere. From intimate dinner gatherings to grand receptions, we craft pieces that feel as luxurious as they taste.</p>
         </article>
-        <article class="product-card">
-          <div class="product-image" style="background-image:url('https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=800&auto=format&fit=crop&q=80');"></div>
-          <div class="product-content">
-            <h3>Brownies</h3>
-            <p>Soft, fudgy brownies with a crackly top and intense chocolate flavour.</p>
-            <div class="product-meta">Box of 8 from ₹420</div>
-          </div>
-        </article>
-        <article class="product-card">
-          <div class="product-image" style="background-image:url('https://images.unsplash.com/photo-1608198093005-d29b3c0bbf96?w=800&auto=format&fit=crop&q=80');"></div>
-          <div class="product-content">
-            <h3>Pineapple Cake</h3>
-            <p>Moist pineapple cake with perfectly balanced sweetness.</p>
-            <div class="product-meta">From ₹760</div>
-          </div>
+        <article class="detail-card detail-callout">
+          <span class="detail-title">Let's Design Your Dream Cake</span>
+          <p>Book a private consultation to refine your colors, textures and finishing details with our pastry atelier.</p>
+          <a href="tel:9011560339" class="btn btn-secondary">Schedule a Call</a>
         </article>
       </div>
     </section>
+
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <span>Craveessa</span>
+          <p>Artisan cakes with a quiet luxury spirit.</p>
+        </div>
+        <div class="footer-links">
+          <div class="footer-social">
+            <span>Follow us</span>
+            <div>
+              <a href="#" aria-label="Instagram">Instagram</a>
+              <a href="#" aria-label="Facebook">Facebook</a>
+              <a href="#" aria-label="Pinterest">Pinterest</a>
+            </div>
+          </div>
+          <div class="footer-contact">
+            <span>Contact</span>
+            <a href="tel:9011560339">9011560339</a>
+          </div>
+        </div>
+      </div>
+    </footer>
   </main>
-
-  <footer class="app-footer">
-    <div class="footer-container">
-      <div class="footer-logo">
-        <img src="assets/cakeimg.jpg" alt="Craveessa cake logo" class="footer-logo-img">
-        <span>Craveessa</span>
-      </div>
-      <p class="footer-tagline">Making your celebrations a whole lot sweeter!</p>
-      <div class="footer-socials">
-        <a href="https://www.instagram.com/craveessa" target="_blank" rel="noopener">Instagram</a>
-      </div>
-      <div class="footer-areas"><a href="https://maps.app.goo.gl/rs3uWCRPh6fMpWcV9" target="_blank" rel="noopener">📍 Serving: Pune and nearby neighbourhoods.</a></div>
-      <p class="owner-credit">Owned and created by Srushti Jagtap.</p>
-      <div class="footer-copyright">
-        &copy; 2026 Craveessa. All rights reserved.<br>
-        Made with ❤️ for sweet lovers.
-      </div>
-    </div>
-  </footer>
 </body>
 </html>

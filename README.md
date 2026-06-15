@@ -1,6 +1,6 @@
-# 🎂 Crave Essa Discount Landing Page
+# 🎂 Craveessa Discount Landing Page
 
-Welcome to the **Crave Essa** QR Discount Landing Page! This is a complete, mobile-first, high-converting single-page website designed specifically for customers who scan QR codes printed on your cake boxes or marketing pamphlets.
+Welcome to the **Craveessa** QR Discount Landing Page! This is a complete, mobile-first, high-converting single-page website designed specifically for customers who scan QR codes printed on your cake boxes or marketing pamphlets.
 
 ---
 
@@ -84,3 +84,47 @@ const CRAVE_CONFIG = {
   // ...
 };
 ```
+
+## 🗄️ Optional: Local DB + Excel Export
+
+If you prefer to store submissions locally and download them as an Excel file, a tiny Node.js backend is included.
+
+Run the backend from the project root:
+
+```bash
+npm install
+npm start
+```
+
+Notes:
+- The backend listens on `http://localhost:3000`.
+- Submissions are saved to `submissions.db` (SQLite) in the project folder.
+- Download all submissions as Excel at: `http://localhost:3000/export` (produces `submissions.xlsx`).
+- The site will POST form submissions to this backend if you keep the default client script change in `script.js`.
+
+## 📦 Deploying the full app (frontend + backend)
+
+This project can run as a single deployable app (serves static site + API). Two common options:
+
+- Docker (recommended for reproducible deploys):
+
+```bash
+# build image
+docker build -t craveessa:latest .
+
+# run (persist DB with a host volume)
+docker run -p 3000:3000 -v "$PWD/submissions.db":/app/submissions.db -e PORT=3000 -d craveessa:latest
+
+# visit http://localhost:3000
+```
+
+- Platform-as-a-Service (Heroku / Render / Railway):
+   - Ensure `PORT` is read from env (the server does this).
+   - Add the repo and deploy; the `Procfile` (`web: npm start`) is provided.
+   - For persistence, configure a persistent disk or attach an external database. If persistence is not available, expect the SQLite file to be ephemeral between deploys.
+
+Notes on persistence and production:
+- SQLite is fine for small-scale or staging deployments. For production use, prefer an external DB (Postgres/MySQL) and update `db.js` accordingly.
+- When deploying with Docker, mount a host volume for `submissions.db` to persist data across container restarts.
+
+
