@@ -252,9 +252,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (discountForm) {
     discountForm.addEventListener("submit", (e) => {
+      e.preventDefault();
       // Validate last step before submitting
       if (!validateStep(3)) {
-        e.preventDefault();
+        
         return;
       }
 
