@@ -43,8 +43,8 @@ const corsOptions = {
       allowedOrigins.push(...process.env.ALLOWED_ORIGINS.split(','));
     }
     
-    // Allow *.vercel.app domains and configured custom domains
-    if (origin && (origin.includes('vercel.app') || origin.includes('localhost') || origin.includes('127.0.0.1'))) {
+    // Allow *.vercel.app domains, Railway domains, localhost, and configured origins
+    if (origin && (origin.includes('vercel.app') || origin.includes('railway.app') || origin.includes('localhost') || origin.includes('127.0.0.1'))) {
       callback(null, true);
     } else if (allowedOrigins.includes(origin)) {
       callback(null, true);
