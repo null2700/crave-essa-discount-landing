@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -73,7 +73,7 @@
         <p>Every submission unlocks a fresh discount code and a pre-filled WhatsApp order link.</p>
       </div>
 
-      <form id="discountForm" target="hidden_iframe" method="POST" class="discount-form">
+      <form id="discountForm"  class="discount-form">
         <div class="progress-shell">
           <div id="quiz-progress-bar" class="progress-bar"></div>
         </div>
@@ -146,8 +146,7 @@
           </div>
         </div>
 
-        <iframe name="hidden_iframe" style="display:none;"></iframe>
-      </form>
+        </form>
     </section>
 
     <section class="urgency-bar" id="urgency-bar">
@@ -202,6 +201,9 @@
       <a id="referral-wa-link" href="#">Share the discount</a>
     </div>
   </footer>
+  <script>window.__CRAVEESSA_API_URL__ = "https://crave-essa-discount-landing-production.up.railway.app/owner";
+    </script>
+<script src="config.discount.js"></script>
 
   <script src="config.discount.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
