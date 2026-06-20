@@ -100,6 +100,7 @@ Notes:
 - The backend listens on `http://localhost:3000`.
 - Submissions are saved to `submissions.db` (SQLite) in the project folder.
 - Download all submissions as Excel at: `http://localhost:3000/export` (produces `submissions.xlsx`).
+ - Download all submissions as CSV at: `http://localhost:3000/export` (produces `submissions.csv`).
 - The site will POST form submissions to this backend if you keep the default client script change in `script.js`.
 
 ## 📦 Deploying the full app (frontend + backend)
@@ -126,5 +127,105 @@ docker run -p 3000:3000 -v "$PWD/submissions.db":/app/submissions.db -e PORT=300
 Notes on persistence and production:
 - SQLite is fine for small-scale or staging deployments. For production use, prefer an external DB (Postgres/MySQL) and update `db.js` accordingly.
 - When deploying with Docker, mount a host volume for `submissions.db` to persist data across container restarts.
+
+## Owner order interface (phone-friendly)
+
+If you want the owner to view orders on their phone without a developer PC or a backend, use the included owner page that reads the Google Form response sheet.
+
+Steps:
+1. Open the Google Sheet that receives your Form responses.
+2. File → Publish to the web → select the sheet (Responses) → Format: Comma-separated values (CSV) → Publish.
+3. Copy the generated `CSV` URL.
+4. Open `config.discount.js` and set `ownerFeedUrl` to the CSV URL you copied.
+5. Serve the site (or deploy static files). Open `/owner.html` on the owner's phone to view orders.
+
+Behavior:
+- The `owner.html` page fetches the published CSV and renders a table.
+- It auto-refreshes every 3 hours and has a manual "Refresh now" button.
+
+Security note: Publishing the sheet makes its contents public to anyone with the URL. If you need stricter access control, consider using the Google Sheets API with proper auth or an authenticated backend.
+
+### Private owner dashboard (password-protected)
+
+If you prefer a private owner dashboard (not public), use the password-protected page at `/owner-private.html`.
+
+1. Set an environment variable `OWNER_PASSWORD` to a strong password before starting the server, e.g. on Linux/macOS:
+
+```bash
+export OWNER_PASSWORD=MyStrongOwnerPass
+npm start
+```
+
+On Windows PowerShell:
+
+```powershell
+$env:OWNER_PASSWORD = 'MyStrongOwnerPass'
+npm start
+```
+
+2. Open `http://<host>:<port>/owner-private.html` on the owner's device.
+3. Enter the password to view orders. The password is stored in the browser session only.
+
+The private dashboard fetches orders from the server's SQLite DB and lets the owner mark orders as collected. This keeps the data off the public internet and requires the password to access.
+
+## Production & deployment notes
+
+Security and persistence recommendations for production:
+
+- Environment variables (set in your host or container):
+   - `PORT` — port to run the server (default 3000)
+   - `SESSION_SECRET` — a long random string used to sign session cookies (required in production)
+   - `OWNER_PASSWORD` or `OWNER_PASSWORD_HASH` — owner login credential (set `OWNER_PASSWORD_HASH` to a bcrypt hash for extra safety)
+
+- Per-owner accounts and setup:
+   - To create an owner in production, set `SETUP_TOKEN` (a one-time secret) in the environment and call the `/owner/setup` endpoint with that token to create the first owner account.
+   - After creating owners, the app will use the `owners` table for authentication. Each owner can optionally enable TOTP 2FA.
+
+- Session cookie & HTTPS:
+   - The app sets session cookies with `secure` enabled only when `NODE_ENV=production`. Serve the app over HTTPS (use a reverse proxy like Nginx, or host on Render/Heroku which provides TLS). For multiple instances, configure a shared session store (Redis) instead of the default memory store.
+
+- Docker example (recommended for reproducible deploys):
+
+```bash
+# build image
+docker build -t craveessa:latest .
+
+# run (persist DB with a host volume, set secrets via env)
+docker run -p 3000:3000 -v "$PWD/submissions.db":/app/submissions.db -e PORT=3000 -e SESSION_SECRET='your_session_secret' -e OWNER_PASSWORD='YourOwnerPass' -e NODE_ENV=production -d craveessa:latest
+```
+
+Docker Compose (app + Redis) example:
+
+```yaml
+version: '3.8'
+services:
+   redis:
+      image: redis:7-alpine
+      restart: unless-stopped
+
+   app:
+      build: .
+      ports:
+         - '3000:3000'
+      environment:
+         - PORT=3000
+         - NODE_ENV=production
+         - SESSION_SECRET=your_session_secret
+         - REDIS_URL=redis://redis:6379
+         - SETUP_TOKEN=your_setup_token
+      volumes:
+         - ./submissions.db:/app/submissions.db
+      depends_on:
+         - redis
+
+```
+
+- For cloud platforms (Render/Heroku): set the same env vars in the dashboard, enable HTTPS, and mount a persistent disk or use an external database for persistence.
+
+- Use a managed DB or Redis for production for better durability and scaling.
+
+Vulnerability scanning:
+- Run `npm audit` regularly and update dependencies. I can help run `npm audit fix` and review any remaining issues.
+
 
 

@@ -161,6 +161,107 @@
       </div>
     </section>
 
+    <section id="dream-cake-visualizer" class="visualizer-section">
+      <div class="section-header">
+        <span class="section-label">Dream Cake Visualizer</span>
+        <h2>🎨 Design Your Dream Cake — Powered by AI</h2>
+        <p class="section-copy">Tell us what you want and our AI will design 3 stunning cake concepts just for you — for free! 🎂✨</p>
+      </div>
+      <div class="visualizer-grid">
+        <div class="visualizer-form-panel">
+          <div class="input-group">
+            <label for="visualCakeWeight">Cake Weight</label>
+            <select id="visualCakeWeight" class="visualizer-input" aria-label="Cake Weight">
+              <option value="250g">250g</option>
+              <option value="500g">500g</option>
+              <option value="1 kg">1 kg</option>
+              <option value="2 kg">2 kg</option>
+              <option value="3 kg">3 kg</option>
+              <option value="5 kg">5 kg</option>
+            </select>
+          </div>
+
+          <div class="input-group">
+            <label>Number of Tiers</label>
+            <div class="tier-toggle-group" role="group" aria-label="Number of Tiers">
+              <button type="button" class="tier-toggle-btn active" data-value="1 Tier">1 Tier</button>
+              <button type="button" class="tier-toggle-btn" data-value="2 Tiers">2 Tiers</button>
+              <button type="button" class="tier-toggle-btn" data-value="3 Tiers">3 Tiers</button>
+              <button type="button" class="tier-toggle-btn" data-value="4+ Tiers">4+ Tiers</button>
+            </div>
+          </div>
+
+          <div class="input-group">
+            <label for="visualTheme">Theme</label>
+            <input id="visualTheme" type="text" class="visualizer-input" placeholder="e.g. Jungle, Glam/Luxury" aria-label="Cake Theme">
+            <div id="themeSuggestions" class="theme-suggestions" aria-label="Theme suggestions">
+              <button type="button" class="theme-chip">🦁 Jungle</button>
+              <button type="button" class="theme-chip">🦋 Floral</button>
+              <button type="button" class="theme-chip">👸 Princess</button>
+              <button type="button" class="theme-chip">🚗 Cars</button>
+              <button type="button" class="theme-chip">🌊 Ocean</button>
+              <button type="button" class="theme-chip">🎮 Gaming</button>
+              <button type="button" class="theme-chip">💍 Wedding</button>
+              <button type="button" class="theme-chip">🌸 Minimalist</button>
+              <button type="button" class="theme-chip">🎃 Halloween</button>
+              <button type="button" class="theme-chip">✨ Glam/Luxury</button>
+              <button type="button" class="theme-chip">🎓 Graduation</button>
+              <button type="button" class="theme-chip">🐾 Pets</button>
+            </div>
+          </div>
+
+          <div class="input-group">
+            <label for="visualFlavor">Flavor</label>
+            <select id="visualFlavor" class="visualizer-input" aria-label="Cake Flavor">
+              <option value="Chocolate">Chocolate</option>
+              <option value="Vanilla">Vanilla</option>
+              <option value="Red Velvet">Red Velvet</option>
+              <option value="Black Forest">Black Forest</option>
+              <option value="Butterscotch">Butterscotch</option>
+              <option value="Pineapple">Pineapple</option>
+              <option value="Matcha">Matcha</option>
+              <option value="Mixed (Surprise me)">Mixed (Surprise me)</option>
+            </select>
+          </div>
+
+          <div class="input-group">
+            <label for="visualOccasion">Occasion</label>
+            <select id="visualOccasion" class="visualizer-input" aria-label="Occasion">
+              <option value="Birthday">Birthday</option>
+              <option value="Anniversary">Anniversary</option>
+              <option value="Wedding">Wedding</option>
+              <option value="Baby Shower">Baby Shower</option>
+              <option value="Graduation">Graduation</option>
+              <option value="Corporate">Corporate</option>
+              <option value="Just Because">Just Because</option>
+            </select>
+          </div>
+
+          <div class="input-group color-input-group">
+            <label for="visualColorPref">Color Preference</label>
+            <div class="color-pref-row">
+              <input id="visualColorPref" type="text" class="visualizer-input" placeholder="e.g. blush & gold, moody jewel tones" aria-label="Color Preference">
+              <button type="button" id="surpriseColorBtn" class="btn btn-secondary">Surprise me 🎲</button>
+            </div>
+          </div>
+
+          <div class="input-group">
+            <label for="visualSpecialRequests">Special Requests</label>
+            <textarea id="visualSpecialRequests" class="visualizer-input" rows="4" placeholder="e.g. egg-free, must have a unicorn topper, no nuts, pastel colors only..."></textarea>
+          </div>
+
+          <div class="visualizer-actions">
+            <button type="button" class="btn btn-primary btn-visualize" id="generateVisualsBtn">✨ Generate My Cake Designs</button>
+          </div>
+          <div id="visualizerError" class="visualizer-error" aria-live="polite"></div>
+        </div>
+
+        <div class="visualizer-preview-panel">
+          <div id="visualizerResult" class="visualizer-result-shell" aria-live="polite"></div>
+        </div>
+      </div>
+    </section>
+
     <section id="faq" class="faq-section">
       <div class="faq-header">
         <span class="section-label">FAQs</span>
@@ -205,5 +306,7 @@
       </div>
     </footer>
   </main>
+  <script src="config.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>

@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Owner Dashboard — Craveessa</title>
+  <style>
+    :root{--bg:#f7f7fb;--card:#fff;--muted:#666;--accent:#ff6b6b}
+    body{font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial;margin:0;background:var(--bg);color:#111}
+    .wrap{max-width:900px;margin:20px auto;padding:16px}
+    header{display:flex;align-items:center;justify-content:space-between}
+    h1{margin:0;font-size:1.1rem}
+    .controls{display:flex;gap:8px;align-items:center}
+    button{background:#fff;border:1px solid #ddd;padding:8px 10px;border-radius:8px;cursor:pointer}
+    .cards{display:grid;grid-template-columns:1fr;gap:12px;margin-top:12px}
+    .card{background:var(--card);padding:12px;border-radius:10px;box-shadow:0 1px 4px rgba(0,0,0,.05);display:flex;justify-content:space-between}
+    .left{max-width:70%}
+    .meta{color:var(--muted);font-size:0.85rem}
+    .actions{display:flex;flex-direction:column;gap:8px;align-items:flex-end}
+    .collected{background:#e6fff0;border:1px solid #bdeccf}
+    #loginOverlay{position:fixed;inset:0;background:rgba(0,0,0,0.45);display:flex;align-items:center;justify-content:center}
+    .loginBox{background:#fff;padding:18px;border-radius:10px;min-width:280px}
+    .loginBox input{width:100%;padding:8px;margin-top:8px;border:1px solid #ddd;border-radius:6px}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>Owner Dashboard</h1>
+      <div class="controls">
+        <button id="refreshBtn">Refresh</button>
+        <div id="lastUpdated" class="meta"></div>
+      </div>
+    </header>
+
+    <div id="content">
+      <div id="cards" class="cards"></div>
+      <div id="empty" class="meta"></div>
+    </div>
+  </div>
+
+  <div id="loginOverlay">
+    <div class="loginBox">
+      <div style="font-weight:600">Owner Login</div>
+      <div class="meta">Enter your username and password to view orders. If 2FA is enabled you'll be prompted.</div>
+      <input id="ownerUser" type="text" placeholder="Username" />
+      <input id="ownerPass" type="password" placeholder="Password" />
+      <input id="owner2fa" type="text" placeholder="2FA code (if required)" style="display:none" />
+      <div style="display:flex;gap:8px;margin-top:10px">
+        <button id="loginBtn">Login</button>
+      </div>
+      <div class="meta" style="margin-top:8px">Credentials are sent to the server over your connection; use HTTPS in production.</div>
+    </div>
+  </div>
+
+  <script src="config.discount.js"></script>
+  <script src="owner-private.js"></script>
+</body>
+</html>

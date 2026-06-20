@@ -641,3 +641,377 @@ Looking forward to bakes! 💖`;
   document.head.appendChild(style);
 
 });
+
+/* ===== DREAM CAKE VISUALIZER — NEW SECTION START ===== */
+document.addEventListener('DOMContentLoaded', () => {
+  const visualizerSection = document.getElementById('dream-cake-visualizer');
+  if (!visualizerSection) return;
+
+  const cakeWeight = document.getElementById('visualCakeWeight');
+  const tierButtons = Array.from(document.querySelectorAll('.tier-toggle-btn'));
+  const themeInput = document.getElementById('visualTheme');
+  const themeChips = Array.from(document.querySelectorAll('.theme-chip'));
+  const flavorSelect = document.getElementById('visualFlavor');
+  const occasionSelect = document.getElementById('visualOccasion');
+  const colorPrefInput = document.getElementById('visualColorPref');
+  const surpriseColorBtn = document.getElementById('surpriseColorBtn');
+  const specialRequests = document.getElementById('visualSpecialRequests');
+  const generateBtn = document.getElementById('generateVisualsBtn');
+  const resultShell = document.getElementById('visualizerResult');
+  const errorEl = document.getElementById('visualizerError');
+
+  const cakeConfig = window.CAKE_VISUALIZER_CONFIG || {};
+  const apiKey = cakeConfig.ANTHROPIC_API_KEY;
+  const pollinationsBase = 'https://image.pollinations.ai/prompt/';
+  const notReadyMessage = 'Our cake AI is being set up — DM us on Instagram @craveessa and we\'ll design your cake personally! 🎨';
+  const colorOptions = [
+    'blush pink & cream',
+    'emerald green & gold',
+    'midnight navy & silver',
+    'sunset coral & peach',
+    'lavender & champagne',
+    'moody plum & copper',
+    'pearl white & pale sage',
+    'caramel & dusty rose',
+    'smoked taupe & ivory',
+    'bold fuchsia & metallic rose'
+  ];
+  const loadingTexts = [
+    'Mixing ingredients...',
+    'Layering the tiers...',
+    'Adding the finishing touches...',
+    'Your dream cake is almost ready...'
+  ];
+
+  let loadingInterval = null;
+  let loadingIndex = 0;
+
+  const useAnthropic = (key) => typeof key === 'string' && key.trim() !== '' && key !== 'PASTE_YOUR_KEY_HERE';
+  const pollinationsImageUrl = (prompt) => `${pollinationsBase}${encodeURIComponent(prompt)}`;
+
+  const buildPromptMeta = () => {
+    return {
+      theme: themeInput.value.trim() || 'elegant celebration',
+      flavor: flavorSelect.value,
+      occasion: occasionSelect.value,
+      color: colorPrefInput.value.trim() || 'soft blush and cream',
+      tier: getSelectedTier(),
+      special: specialRequests.value.trim() || 'No special requests'
+    };
+  };
+
+  const buildImagePrompt = (meta, mood) => `professional food photography, ${meta.tier} celebration cake, ${mood}, ${meta.theme} theme, ${meta.flavor} flavor, ${meta.color} palette, ${meta.occasion} styling, soft studio lighting, 45-degree angle, white marble surface, bokeh background, hyper-realistic, 8K resolution`;
+
+  const buildConceptCard = (index, meta, style) => {
+    const prompt = buildImagePrompt(meta, style);
+
+    return {
+      title: `Design ${index + 1}`,
+      promptText: prompt,
+      imageUrl: pollinationsImageUrl(prompt)
+    };
+  };
+
+  const renderPollinationsFallback = (designs) => {
+    if (!resultShell) return;
+
+    const html = designs.map((design) => `
+      <div class="visualizer-concept-card">
+        <div class="visualizer-concept-title">${escapeHtml(design.title)}</div>
+        <img src="${escapeHtml(design.imageUrl)}" alt="Dream cake preview" class="visualizer-pollinations-img">
+        <div class="visualizer-prompt-block">
+          <div class="prompt-label">Image prompt</div>
+          <div class="prompt-text">${escapeHtml(design.promptText)}</div>
+          <div class="prompt-actions">
+            <button type="button" class="copy-prompt-btn">📋 Copy Image Prompt</button>
+          </div>
+          <div class="prompt-links">
+            <a class="prompt-link-btn" href="${escapeHtml(design.imageUrl)}" target="_blank" rel="noopener">🧪 Try on Pollinations.ai</a>
+            <a class="prompt-link-btn" href="https://app.leonardo.ai" target="_blank" rel="noopener">🎨 Try on Leonardo.ai</a>
+            <a class="prompt-link-btn" href="https://firefly.adobe.com" target="_blank" rel="noopener">🖼️ Try on Adobe Firefly</a>
+            <a class="prompt-link-btn" href="https://ideogram.ai" target="_blank" rel="noopener">🤖 Try on Ideogram</a>
+          </div>
+        </div>
+      </div>
+    `).join('');
+
+    const whatsappHref = buildWhatsAppLink('Design 1');
+
+    resultShell.innerHTML = `
+      <div class="visualizer-result-card">
+        ${html}
+        <div class="visualizer-result-actions">
+          <a id="visualizerWhatsAppBtn" class="visualizer-wa-share" target="_blank" rel="noopener" href="${escapeHtml(whatsappHref)}">📲 Send This Design to Craveessa on WhatsApp</a>
+          <button type="button" id="visualizerTryAgain" class="visualizer-try-again">🔄 Try Again with Different Inputs</button>
+        </div>
+      </div>
+    `;
+  };
+
+  const escapeHtml = (text) => {
+    return String(text || '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  };
+
+  const setActiveTier = (value) => {
+    tierButtons.forEach((btn) => {
+      const active = btn.dataset.value === value;
+      btn.classList.toggle('active', active);
+    });
+  };
+
+  tierButtons.forEach((button) => {
+    button.addEventListener('click', () => {
+      setActiveTier(button.dataset.value);
+    });
+  });
+
+  themeChips.forEach((chip) => {
+    chip.addEventListener('click', () => {
+      themeInput.value = chip.textContent.replace(/^[^a-zA-Z0-9]+/, '').trim();
+      themeInput.focus();
+    });
+  });
+
+  surpriseColorBtn.addEventListener('click', () => {
+    const randomIndex = Math.floor(Math.random() * colorOptions.length);
+    colorPrefInput.value = colorOptions[randomIndex];
+  });
+
+  const updateLoadingText = () => {
+    if (!resultShell) return;
+    const copy = loadingTexts[loadingIndex % loadingTexts.length];
+    const loadingCopy = resultShell.querySelector('.loading-copy');
+    if (loadingCopy) {
+      loadingCopy.textContent = copy;
+    }
+    loadingIndex += 1;
+  };
+
+  const showLoadingState = () => {
+    if (!resultShell) return;
+    generateBtn.disabled = true;
+    resultShell.innerHTML = `
+      <div class="visualizer-loading">
+        <div class="loading-emoji" aria-hidden="true">🎂</div>
+        <div class="loading-copy">${loadingTexts[0]}</div>
+      </div>
+    `;
+    loadingIndex = 0;
+    if (loadingInterval) {
+      clearInterval(loadingInterval);
+    }
+    loadingInterval = setInterval(updateLoadingText, 1500);
+  };
+
+  const hideLoadingState = () => {
+    if (loadingInterval) {
+      clearInterval(loadingInterval);
+      loadingInterval = null;
+    }
+    if (generateBtn) {
+      generateBtn.disabled = false;
+    }
+  };
+
+  const getSelectedTier = () => {
+    const active = tierButtons.find((btn) => btn.classList.contains('active'));
+    return active ? active.dataset.value : '1 Tier';
+  };
+
+  const buildUserPrompt = () => {
+    return `Cake Weight: ${cakeWeight.value}
+Number of Tiers: ${getSelectedTier()}
+Theme: ${themeInput.value.trim() || 'No theme specified'}
+Flavor: ${flavorSelect.value}
+Occasion: ${occasionSelect.value}
+Color Preference: ${colorPrefInput.value.trim() || 'Surprise me'}
+Special Requests: ${specialRequests.value.trim() || 'No special requests'}
+`;
+  };
+
+  const buildWhatsAppLink = (conceptTitle) => {
+    const baseUrl = `https://wa.me/${window.CRAVE_CONFIG?.whatsappNumber || '9011560339'}`;
+    const selectedConcept = conceptTitle || 'Concept 1';
+    const themeText = themeInput.value.trim() || 'No theme specified';
+    const occasionText = occasionSelect.value;
+    const cakeSizeText = cakeWeight.value;
+    const message = `Hi Craveessa! I used the AI cake designer and loved ${selectedConcept}. Here are my details: ${cakeSizeText}, ${themeText}, ${occasionText}. Can you make this for me?`;
+    return `${baseUrl}?text=${encodeURIComponent(message)}`;
+  };
+
+  const renderVisualResponse = (text) => {
+    const lines = text.split(/\r?\n/);
+    let html = '';
+    let inList = false;
+    let promptActive = false;
+    let currentPrompt = '';
+    let selectedConceptName = 'Concept 1';
+
+    lines.forEach((rawLine) => {
+      const line = rawLine.trim();
+      if (!line) {
+        if (inList) {
+          html += '</ul>';
+          inList = false;
+        }
+        html += '<div class="visualizer-paragraph-break"></div>';
+        return;
+      }
+
+      if (/^🎂 CONCEPT \[\d+\/3\] — /.test(line)) {
+        if (inList) {
+          html += '</ul>';
+          inList = false;
+        }
+        const match = line.match(/^🎂 CONCEPT \[\d+\/3\] — (.+)$/);
+        if (match && !selectedConceptName) {
+          selectedConceptName = match[1];
+        }
+        html += `<div class="visualizer-concept-title">${escapeHtml(line)}</div>`;
+        return;
+      }
+
+      if (/^(👁️|🍰|🎨|🌈|✨|🍫|✅|🎉|📸|⭐|⏱️|💬)/.test(line)) {
+        if (inList) {
+          html += '</ul>';
+          inList = false;
+        }
+        if (line.startsWith('📸 IMAGE PROMPT')) {
+          promptActive = true;
+          html += `<div class="visualizer-section-title">${escapeHtml(line)}</div>`;
+          return;
+        }
+        html += `<div class="visualizer-section-title">${escapeHtml(line)}</div>`;
+        return;
+      }
+
+      if (promptActive && line.startsWith('"') && line.endsWith('"')) {
+        currentPrompt = line.slice(1, -1);
+        html += `
+          <div class="visualizer-prompt-block">
+            <div class="prompt-label">Prompt</div>
+            <div class="prompt-text">${escapeHtml(currentPrompt)}</div>
+            <div class="prompt-actions">
+              <button type="button" class="copy-prompt-btn">📋 Copy Image Prompt</button>
+            </div>
+            <div class="prompt-links">
+              <a class="prompt-link-btn" href="https://app.leonardo.ai" target="_blank" rel="noopener">🎨 Try on Leonardo.ai</a>
+              <a class="prompt-link-btn" href="https://firefly.adobe.com" target="_blank" rel="noopener">🖼️ Try on Adobe Firefly</a>
+              <a class="prompt-link-btn" href="https://ideogram.ai" target="_blank" rel="noopener">🤖 Try on Ideogram</a>
+            </div>
+          </div>
+        `;
+        promptActive = false;
+        return;
+      }
+
+      if (/^-\s+/.test(line)) {
+        if (!inList) {
+          html += '<ul class="visualizer-bullet-list">';
+          inList = true;
+        }
+        html += `<li>${escapeHtml(line.replace(/^-\s+/, ''))}</li>`;
+        return;
+      }
+
+      html += `<p>${escapeHtml(line)}</p>`;
+    });
+
+    if (inList) {
+      html += '</ul>';
+    }
+
+    const conceptMatch = text.match(/^🎂 CONCEPT \[1\/3\] — (.+)$/m);
+    const conceptTitle = conceptMatch ? conceptMatch[1] : 'Concept 1';
+    const whatsappHref = buildWhatsAppLink(conceptTitle);
+
+    resultShell.innerHTML = `
+      <div class="visualizer-result-card">
+        ${html}
+        <div class="visualizer-result-actions">
+          <a id="visualizerWhatsAppBtn" class="visualizer-wa-share" target="_blank" rel="noopener" href="${escapeHtml(whatsappHref)}">📲 Send This Design to Craveessa on WhatsApp</a>
+          <button type="button" id="visualizerTryAgain" class="visualizer-try-again">🔄 Try Again with Different Inputs</button>
+        </div>
+      </div>
+    `;
+  };
+
+  const clearVisualizerInputs = () => {
+    setActiveTier('1 Tier');
+    cakeWeight.value = '250g';
+    themeInput.value = '';
+    flavorSelect.value = 'Chocolate';
+    occasionSelect.value = 'Birthday';
+    colorPrefInput.value = '';
+    specialRequests.value = '';
+    if (resultShell) {
+      resultShell.innerHTML = '';
+    }
+    if (errorEl) {
+      errorEl.textContent = '';
+    }
+  };
+
+  const showErrorMessage = (message) => {
+    if (errorEl) {
+      errorEl.textContent = message;
+    }
+    if (resultShell) {
+      resultShell.innerHTML = `
+        <div class="visualizer-result-card">
+          <p>${escapeHtml(message)}</p>
+        </div>
+      `;
+    }
+  };
+
+  generateBtn.addEventListener('click', async () => {
+    if (!resultShell || !generateBtn) return;
+    errorEl.textContent = '';
+    showLoadingState();
+
+    try {
+      const meta = buildPromptMeta();
+      const styles = [
+        'soft sugar flower accents and pearl details',
+        'modern brushstroke lines with metallic finishes',
+        'classic layered elegance with luxurious frosting highlights'
+      ];
+      const concepts = [0, 1, 2].map((index) => buildConceptCard(index, meta, styles[index]));
+      await new Promise((resolve) => setTimeout(resolve, 1200));
+      renderPollinationsFallback(concepts);
+    } catch (err) {
+      showErrorMessage('Something went wrong — but don\'t worry! WhatsApp us your cake idea and we\'ll design it for you 💬');
+    } finally {
+      hideLoadingState();
+    }
+  });
+
+  resultShell.addEventListener('click', (event) => {
+    const copyBtn = event.target.closest('.copy-prompt-btn');
+    if (copyBtn) {
+      const promptBlock = copyBtn.closest('.visualizer-prompt-block');
+      const promptText = promptBlock ? promptBlock.querySelector('.prompt-text')?.innerText : '';
+      if (promptText) {
+        navigator.clipboard.writeText(promptText).then(() => {
+          const original = copyBtn.innerText;
+          copyBtn.innerText = '✅ Copied!';
+          setTimeout(() => {
+            copyBtn.innerText = original;
+          }, 1800);
+        });
+      }
+      return;
+    }
+
+    if (event.target.id === 'visualizerTryAgain') {
+      clearVisualizerInputs();
+      visualizerSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+});

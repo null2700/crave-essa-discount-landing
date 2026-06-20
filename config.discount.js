@@ -22,6 +22,10 @@ const CRAVE_CONFIG = {
       instagramFollowed: ""
     }
   }
+  ,
+  // Optional: URL to the published Google Sheet CSV (owner view)
+  // Publish your Google Form's response sheet (File → Publish to web → CSV) and paste the URL here.
+  ownerFeedUrl: ""
 };
 
 if (typeof module !== "undefined" && module.exports) {
