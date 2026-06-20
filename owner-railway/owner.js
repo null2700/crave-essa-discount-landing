@@ -29,6 +29,11 @@
   const productsList = document.getElementById('productsList');
   const productsMessage = document.getElementById('productsMessage');
 
+  const submissionsTab = document.getElementById('submissionsTab');
+  const refreshSubmissionsBtn = document.getElementById('refreshSubmissionsBtn');
+  const submissionsList = document.getElementById('submissionsList');
+  const submissionsMessage = document.getElementById('submissionsMessage');
+
   const showAuth = () => {
     authPanel.classList.remove('hidden');
     mainDashboard.classList.add('hidden');
@@ -41,6 +46,7 @@
     logoutBtn.classList.remove('hidden');
     activateTab('ordersTab');
     loadOrders();
+    loadSubmissions();
     loadProducts();
   };
 
@@ -247,6 +253,45 @@
     }
   };
 
+  const renderSubmissions = (submissions) => {
+    if (!submissions || submissions.length === 0) {
+      submissionsList.innerHTML = '<div class="message">No customer submissions yet.</div>';
+      return;
+    }
+
+    submissionsList.innerHTML = submissions.map(submission => `
+      <div class="product-card">
+        <div class="product-details">
+          <h4>${submission.fullName || '[No name]'}</h4>
+          <p><strong>Phone:</strong> ${submission.whatsappNumber || 'N/A'}</p>
+          <p><strong>Email:</strong> ${submission.email || 'N/A'}</p>
+          <p><strong>Cake Size:</strong> ${submission.cakeSize || 'N/A'} | <strong>Flavor:</strong> ${submission.flavor || 'N/A'}</p>
+          <p><strong>Occasion:</strong> ${submission.occasion || 'N/A'}</p>
+          <p><strong>Needed by:</strong> ${submission.neededBy || 'N/A'} | <strong>Area:</strong> ${submission.deliveryArea || 'N/A'}</p>
+          <p><strong>Discount:</strong> ${submission.discountCode || 'N/A'} | <strong>Collected:</strong> ${submission.collected ? 'Yes' : 'No'}</p>
+          <p><strong>Submitted:</strong> ${submission.createdAt || 'N/A'}</p>
+        </div>
+        <div class="table-actions">
+          <button class="btn btn-secondary" data-action="delete-submission" data-id="${submission.id}">Delete</button>
+        </div>
+      </div>
+    `).join('');
+  };
+
+  const loadSubmissions = async () => {
+    setMessage(submissionsMessage, 'Loading submissions...', 'info');
+    try {
+      const json = await fetchJson('/api/orders');
+      renderSubmissions(json.rows || []);
+      setMessage(submissionsMessage, 'Submissions loaded.', 'success');
+    } catch (err) {
+      setMessage(submissionsMessage, `Unable to load submissions: ${err.message}`, 'error');
+      if (err.message.includes('Unauthorized')) {
+        showAuth();
+      }
+    }
+  };
+
   const saveProduct = async (payload) => {
     return fetchJson('/api/products', {
       method: 'POST',
@@ -272,6 +317,10 @@
 
   const deleteProduct = async (id) => {
     return fetchJson(`/api/products/${id}`, { method: 'DELETE' });
+  };
+
+  const deleteSubmission = async (id) => {
+    return fetchJson(`/api/submissions/${id}`, { method: 'DELETE' });
   };
 
   loginForm.addEventListener('submit', async (event) => {
@@ -303,6 +352,12 @@
     hideNotificationBanner();
     loadOrders();
   });
+
+  if (refreshSubmissionsBtn) {
+    refreshSubmissionsBtn.addEventListener('click', () => {
+      loadSubmissions();
+    });
+  }
 
   const startOrderPolling = () => {
     setInterval(() => loadOrders(true), 30000);
@@ -424,6 +479,21 @@
       loadProducts();
     } catch (err) {
       setMessage(productsMessage, `Delete failed: ${err.message}`, 'error');
+    }
+  });
+
+  submissionsList.addEventListener('click', async (event) => {
+    const btn = event.target.closest('button[data-action="delete-submission"]');
+    if (!btn) return;
+    const id = btn.getAttribute('data-id');
+    if (!id || !confirm('Delete this submission?')) return;
+    setMessage(submissionsMessage, 'Deleting submission...', 'info');
+    try {
+      await deleteSubmission(id);
+      setMessage(submissionsMessage, 'Submission deleted.', 'success');
+      loadSubmissions();
+    } catch (err) {
+      setMessage(submissionsMessage, `Delete failed: ${err.message}`, 'error');
     }
   });
 
