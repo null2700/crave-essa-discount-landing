@@ -63,7 +63,7 @@ const parseCookies = (cookieHeader) => {
     return acc;
   }, {});
 };
-
+app.get('/', (req, res) => res.redirect('/owner'));
 // Serve frontend static files only from the public folder.
 app.use(express.static(path.join(__dirname, 'public')));
 
