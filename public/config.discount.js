@@ -15,8 +15,8 @@ const CRAVE_CONFIG = {
   apiBaseUrl: (() => {
     // If running on localhost, use local API
     if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-      return 'http://localhost:3000';
-    }
+  return 'http://localhost:3001';   // was 3000 — now matches owner-railway's actual port
+}
     // For production, use a globally configured URL.
     // If using static hosting, set window.__CRAVEESSA_API_URL__ before this config file loads.
     // Example: <script>window.__CRAVEESSA_API_URL__ = 'https://your-railway-owner-server.up.railway.app';</script>
