@@ -428,14 +428,18 @@
   });
 
   // Initial view: show login panel.
-  if (rememberedDevicesStatus) {
-    rememberedDevicesStatus.textContent = 'Saved device login status will appear after you log in.';
-  }
-  showAuth();
-  requestNotificationPermission();
-  const autoLoggedIn = await tryAutoLoginWithSavedDevice();
-  if (autoLoggedIn) {
-    await loadRememberedDeviceCount();
-  }
-  startOrderPolling();
+  const initOwnerDashboard = async () => {
+    if (rememberedDevicesStatus) {
+      rememberedDevicesStatus.textContent = 'Saved device login status will appear after you log in.';
+    }
+    showAuth();
+    requestNotificationPermission();
+    const autoLoggedIn = await tryAutoLoginWithSavedDevice();
+    if (autoLoggedIn) {
+      await loadRememberedDeviceCount();
+    }
+    startOrderPolling();
+  };
+
+  initOwnerDashboard();
 })();

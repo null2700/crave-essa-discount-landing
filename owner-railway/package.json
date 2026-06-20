@@ -4,6 +4,7 @@
   "description": "Backend for Craveessa landing: store submissions and export to Excel",
   "main": "server.js",
   "scripts": {
+    "install": "npm rebuild sqlite3 --build-from-source",
     "start": "node server.js"
   },
   "dependencies": {

@@ -1,5 +1,4 @@
 const { MongoClient, ObjectId } = require('mongodb');
-const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
 
 const MONGODB_URI = process.env.MONGODB_URI;
@@ -10,6 +9,7 @@ let dbMode = MONGODB_URI ? 'mongo' : 'sqlite';
 let mongoClient;
 let mongoDb;
 let sqliteDb;
+let sqlite3;
 
 const formatSubmissionDoc = (doc) => ({
   id: doc._id.toHexString(),
@@ -56,6 +56,9 @@ const parseMongoId = (id) => {
 };
 
 const initSqlite = () => {
+  if (!sqlite3) {
+    sqlite3 = require('sqlite3').verbose();
+  }
   return new Promise((resolve, reject) => {
     sqliteDb = new sqlite3.Database(DB_PATH, (err) => {
       if (err) return reject(err);
