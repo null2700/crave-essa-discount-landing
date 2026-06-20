@@ -89,6 +89,7 @@
     <div id="mainDashboard" class="hidden">
       <div class="tabs">
         <button class="tab-btn active" data-tab="ordersTab">Orders</button>
+        <button class="tab-btn" data-tab="submissionsTab">Submissions</button>
         <button class="tab-btn" data-tab="productsTab">Product Catalog</button>
       </div>
 
@@ -101,6 +102,16 @@
         </div>
         <div id="ordersMessage" class="messages"></div>
         <div id="ordersTable"></div>
+      </div>
+
+      <div id="submissionsTab" class="panel hidden">
+        <h2>Customer Submissions</h2>
+        <p class="meta">View and delete customer form submissions below.</p>
+        <div class="controls">
+          <button id="refreshSubmissionsBtn" class="btn btn-secondary">Refresh Submissions</button>
+        </div>
+        <div id="submissionsMessage" class="messages"></div>
+        <div id="submissionsList"></div>
       </div>
 
       <div id="productsTab" class="panel hidden">

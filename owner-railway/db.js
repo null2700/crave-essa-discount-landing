@@ -275,6 +275,23 @@ async function getAllSubmissions() {
   });
 }
 
+async function deleteSubmission(id) {
+  await dbReady;
+  if (dbMode === 'mongo') {
+    const objectId = parseMongoId(id);
+    if (!objectId) return { changes: 0 };
+    const result = await mongoDb.collection('submissions').deleteOne({ _id: objectId });
+    return { changes: result.deletedCount };
+  }
+
+  return new Promise((resolve, reject) => {
+    sqliteDb.run('DELETE FROM submissions WHERE id = ?', [id], function (err) {
+      if (err) return reject(err);
+      resolve({ changes: this.changes });
+    });
+  });
+}
+
 async function markCollected(id, collected) {
   await dbReady;
   if (dbMode === 'mongo') {
@@ -457,6 +474,7 @@ async function getDeviceTokenCount() {
 module.exports = {
   saveSubmission,
   getAllSubmissions,
+  deleteSubmission,
   markCollected,
   createOwner,
   getOwnerByUsername,

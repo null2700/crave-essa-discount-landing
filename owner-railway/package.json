@@ -5,7 +5,9 @@
   "main": "server.js",
   "scripts": {
     "install": "npm rebuild sqlite3 --build-from-source",
-    "start": "node server.js"
+    "start": "node server.js",
+    "test": "node tests/api.test.js",
+    "test:report": "node tests/api.test.js && echo 'Report generated in test-reports/ folder'"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

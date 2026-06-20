@@ -14,7 +14,7 @@ const Joi = require('joi');
 const redis = require('redis');
 const connectRedis = require('connect-redis');
 const speakeasy = require('speakeasy');
-const { saveSubmission, getAllSubmissions, markCollected, createOwner, getOwnerByUsername, setOwner2FA, getOwnerCount, saveProduct, getProducts, deleteProduct, saveDeviceToken, getDeviceByTokenHash, deleteDeviceToken, pruneOldDeviceTokens, getDeviceTokenCount } = require('./db');
+const { saveSubmission, getAllSubmissions, deleteSubmission, markCollected, createOwner, getOwnerByUsername, setOwner2FA, getOwnerCount, saveProduct, getProducts, deleteProduct, saveDeviceToken, getDeviceByTokenHash, deleteDeviceToken, pruneOldDeviceTokens, getDeviceTokenCount } = require('./db');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -249,6 +249,19 @@ app.delete('/api/products/:id', ownerAuth, async (req, res) => {
     res.json({ ok: true, result });
   } catch (err) {
     console.error('Delete product error', err);
+    res.status(500).json({ ok: false, error: String(err) });
+  }
+});
+
+// Delete submission/order
+app.delete('/api/submissions/:id', ownerAuth, async (req, res) => {
+  try {
+    const id = req.params.id;
+    if (!id) return res.status(400).json({ ok: false, error: 'invalid id' });
+    const result = await deleteSubmission(id);
+    res.json({ ok: true, result });
+  } catch (err) {
+    console.error('Delete submission error', err);
     res.status(500).json({ ok: false, error: String(err) });
   }
 });
