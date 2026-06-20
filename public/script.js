@@ -348,9 +348,16 @@ Looking forward to bakes! 💖`;
           triggerConfettiBurst();
         }
 
-        // Send submission to local backend for storage/export
+        // Send submission to backend for storage/export
         try {
-          fetch('http://localhost:3000/submit', {
+          const apiUrl = (window.CRAVE_CONFIG && window.CRAVE_CONFIG.apiBaseUrl) 
+            ? window.CRAVE_CONFIG.apiBaseUrl 
+            : 'http://localhost:3000';
+          const submitUrl = `${apiUrl}/submit`;
+          
+          console.log('📤 Sending submission to:', submitUrl);
+          
+          fetch(submitUrl, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -366,10 +373,10 @@ Looking forward to bakes! 💖`;
               createdAt: new Date().toISOString()
             })
           }).then(r => r.json()).then(data => {
-            console.log('submission saved', data);
-          }).catch(err => console.error('save submit error', err));
+            console.log('✅ Submission saved successfully:', data);
+          }).catch(err => console.error('❌ Error saving submission:', err));
         } catch (err) {
-          console.error('submit post failed', err);
+          console.error('❌ Submit request failed:', err);
         }
       }
     });
