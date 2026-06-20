@@ -1,4 +1,4 @@
-(function() {
+(async function() {
   const authPanel = document.getElementById('authPanel');
   const loginForm = document.getElementById('loginForm');
   const ownerUsername = document.getElementById('ownerUsername');
