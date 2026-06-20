@@ -11,8 +11,8 @@ RUN npm install --build-from-source
 COPY . .
 
 EXPOSE 3000
-<<<<<<< HEAD
+
 CMD ["node", "server.js"]
-=======
+
 CMD ["node", "server.js"]
->>>>>>> 8f388fe8c66998baef50f9c0672971de71dbe2cb
+
