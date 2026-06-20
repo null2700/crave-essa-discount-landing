@@ -17,11 +17,10 @@ const CRAVE_CONFIG = {
     if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
       return 'http://localhost:3000';
     }
-    // For production (Vercel), use environment variable or custom domain
-    return window.__CRAVEESSA_API_URL__ || (
-      process.env.REACT_APP_API_URL || 
-      'https://your-railway-owner-server.up.railway.app'
-    );
+    // For production, use a globally configured URL.
+    // If using static hosting, set window.__CRAVEESSA_API_URL__ before this config file loads.
+    // Example: <script>window.__CRAVEESSA_API_URL__ = 'https://your-railway-owner-server.up.railway.app';</script>
+    return window.__CRAVEESSA_API_URL__ || null;
   })(),
   
   googleForm: {
