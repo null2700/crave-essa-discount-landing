@@ -350,13 +350,15 @@ Looking forward to bakes! 💖`;
 
         // Send submission to backend for storage/export
         try {
-          const apiUrl = (window.CRAVE_CONFIG && window.CRAVE_CONFIG.apiBaseUrl) 
-            ? window.CRAVE_CONFIG.apiBaseUrl 
-            : 'http://localhost:3000';
-          const submitUrl = `${apiUrl}/submit`;
-          
+          const configApiUrl = window.CRAVE_CONFIG && window.CRAVE_CONFIG.apiBaseUrl;
+          if (!configApiUrl) {
+            console.error('❌ No API URL configured. Set window.__CRAVEESSA_API_URL__ or deploy with the correct env var.');
+            return;
+          }
+
+          const submitUrl = `${configApiUrl}/submit`;
           console.log('📤 Sending submission to:', submitUrl);
-          
+
           fetch(submitUrl, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
