@@ -1013,6 +1013,23 @@ Return the response in JSON format with a top-level key named "concepts" and an 
     `;
   };
 
+  const getApiBaseUrl = () => {
+    if (typeof window !== 'undefined') {
+      const configured = window.CRAVE_API_BASE_URL || window.__CRAVEESSA_API_URL__;
+      if (configured) return configured.replace(/\/$/, '');
+      const currentOrigin = window.location.origin;
+      if (currentOrigin.includes('vercel.app') || currentOrigin.includes('netlify.app')) {
+        return 'https://crave-essa-discount-landing-production.up.railway.app';
+      }
+    }
+    return '';
+  };
+
+  const apiUrl = (path) => {
+    const base = getApiBaseUrl();
+    return `${base}${path}`;
+  };
+
   const clearVisualizerInputs = () => {
     setActiveTier('1 Tier');
     cakeWeight.value = '250g';
@@ -1052,7 +1069,7 @@ Return the response in JSON format with a top-level key named "concepts" and an 
 
     try {
       const meta = buildPromptMeta();
-      const response = await fetch('/api/gemini-design', {
+      const response = await fetch(apiUrl('/api/gemini-design'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
