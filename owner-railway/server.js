@@ -3,6 +3,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const path = require('path');
 const fs = require('fs');
+const https = require('https');
 const crypto = require('crypto');
 const multer = require('multer');
 // CSV export (no exceljs dependency)
