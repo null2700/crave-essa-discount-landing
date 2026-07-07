@@ -1,4 +1,12 @@
 node_modules
+npm-debug.log*
+.env
+submissions.db
+uploads
+.git
+.github
+backups
+*.lognode_modules
 npm-debug.log
 .git
 .github

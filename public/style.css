@@ -630,20 +630,14 @@ body::before {
   min-height: 220px;
   border-radius: 24px;
   margin-bottom: 24px;
-  background-size: cover;
-  background-position: center;
+  overflow: hidden;
 }
 
-.card-vanilla {
-  background-image: linear-gradient(180deg, rgba(255, 250, 243, 0.95), rgba(232, 213, 183, 0.85)), url('https://images.unsplash.com/photo-1495214783159-3503fd1b572d?auto=format&fit=crop&w=700&q=80');
-}
-
-.card-chocolate {
-  background-image: linear-gradient(180deg, rgba(39, 40, 44, 0.68), rgba(126, 91, 57, 0.75)), url('https://images.unsplash.com/photo-1551024601-bec78aea704b?auto=format&fit=crop&w=700&q=80');
-}
-
-.card-pistachio {
-  background-image: linear-gradient(180deg, rgba(244, 241, 233, 0.92), rgba(196, 184, 154, 0.78)), url('https://images.unsplash.com/photo-1541516160072-0bae1577d30d?auto=format&fit=crop&w=700&q=80');
+.card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
 .designer-grid {

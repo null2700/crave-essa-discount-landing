@@ -1,0 +1,7 @@
+[build]
+  publish = "public"
+  command = ""
+
+[dev]
+  command = ""
+  port = 3000

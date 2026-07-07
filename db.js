@@ -126,10 +126,8 @@ const initSqlite = () => {
 };
 
 const initMongo = async () => {
-  mongoClient = new MongoClient(MONGODB_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-  });
+  // Modern MongoDB Node driver (v4+) no longer accepts useNewUrlParser/useUnifiedTopology options
+  mongoClient = new MongoClient(MONGODB_URI);
 
   await mongoClient.connect();
   mongoDb = mongoClient.db(MONGODB_DBNAME);

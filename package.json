@@ -4,7 +4,9 @@
   "description": "Backend for Craveessa landing: store submissions and export to Excel",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "create-owner": "node create_owner.js",
+    "export-backup": "node scripts/export_backup.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

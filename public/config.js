@@ -20,14 +20,3 @@ if (typeof module !== "undefined" && module.exports) {
   window.CRAVE_CONFIG = CRAVE_CONFIG;
 }
 
-/* --- Cake Visualizer Config (append only) --- */
-const CAKE_VISUALIZER_CONFIG = {
-  ANTHROPIC_API_KEY: "PASTE_YOUR_KEY_HERE",
-  // Get free key at console.anthropic.com
-};
-
-if (typeof module !== "undefined" && module.exports) {
-  module.exports.CAKE_VISUALIZER_CONFIG = CAKE_VISUALIZER_CONFIG;
-} else {
-  window.CAKE_VISUALIZER_CONFIG = CAKE_VISUALIZER_CONFIG;
-}

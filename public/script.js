@@ -670,10 +670,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const resultShell = document.getElementById('visualizerResult');
   const errorEl = document.getElementById('visualizerError');
 
-  const cakeConfig = window.CAKE_VISUALIZER_CONFIG || {};
-  const apiKey = cakeConfig.ANTHROPIC_API_KEY;
-  const pollinationsBase = 'https://image.pollinations.ai/prompt/';
-  const notReadyMessage = 'Our cake AI is being set up — DM us on Instagram @craveessa and we\'ll design your cake personally! 🎨';
   const colorOptions = [
     'blush pink & cream',
     'emerald green & gold',
@@ -696,11 +692,50 @@ document.addEventListener('DOMContentLoaded', () => {
   let loadingInterval = null;
   let loadingIndex = 0;
 
-  const useAnthropic = (key) => typeof key === 'string' && key.trim() !== '' && key !== 'PASTE_YOUR_KEY_HERE';
-  const pollinationsImageUrl = (prompt) => `${pollinationsBase}${encodeURIComponent(prompt)}`;
+  // --- Cooldown settings for Generate button ---
+  const COOLDOWN_SECONDS = 60; // adjust as needed
+  const COOLDOWN_KEY = 'cakeGenCooldownUntil';
+  const generateBtnOriginalText = generateBtn ? (generateBtn.textContent || generateBtn.innerText) : '✨ Generate My Cake Designs';
+
+  function startCooldown(button, seconds) {
+    const until = Date.now() + seconds * 1000;
+    try {
+      localStorage.setItem(COOLDOWN_KEY, String(until));
+    } catch (e) {
+      // ignore localStorage errors
+    }
+    runCooldownTimer(button);
+  }
+
+  function runCooldownTimer(button) {
+    if (!button) return;
+    const until = parseInt(localStorage.getItem(COOLDOWN_KEY) || '0', 10);
+    const remaining = Math.ceil((until - Date.now()) / 1000);
+
+    if (remaining <= 0) {
+      // No active cooldown
+      try { localStorage.removeItem(COOLDOWN_KEY); } catch (e) {}
+      // Only enable when not in loading state
+      if (!loadingInterval) {
+        button.disabled = false;
+        button.textContent = generateBtnOriginalText;
+      } else {
+        // keep disabled while loading, but restore original text
+        button.textContent = generateBtnOriginalText;
+      }
+      return;
+    }
+
+    // Active cooldown: show remaining seconds and disable
+    button.disabled = true;
+    button.textContent = `Please wait ${remaining}s...`;
+    // Schedule next tick
+    setTimeout(() => runCooldownTimer(button), 1000);
+  }
 
   const buildPromptMeta = () => {
     return {
+      weight: cakeWeight.value,
       theme: themeInput.value.trim() || 'elegant celebration',
       flavor: flavorSelect.value,
       occasion: occasionSelect.value,
@@ -710,42 +745,79 @@ document.addEventListener('DOMContentLoaded', () => {
     };
   };
 
-  const buildImagePrompt = (meta, mood) => `professional food photography, ${meta.tier} celebration cake, ${mood}, ${meta.theme} theme, ${meta.flavor} flavor, ${meta.color} palette, ${meta.occasion} styling, soft studio lighting, 45-degree angle, white marble surface, bokeh background, hyper-realistic, 8K resolution`;
+  const buildUserPrompt = (meta) => {
+    return `Create three unique luxury cake design concepts for a premium cake studio. Use the following details in your response:
+- Weight: ${meta.weight}
+- Tiers: ${meta.tier}
+- Theme: ${meta.theme}
+- Flavor: ${meta.flavor}
+- Occasion: ${meta.occasion}
+- Colors: ${meta.color}
+- Special requests: ${meta.special}
 
-  const buildConceptCard = (index, meta, style) => {
-    const prompt = buildImagePrompt(meta, style);
+For each concept, provide:
+1) A short concept title.
+2) A concise design description.
+3) A crisp image prompt in quotes suitable for studio-style AI cake rendering.
 
-    return {
-      title: `Design ${index + 1}`,
-      promptText: prompt,
-      imageUrl: pollinationsImageUrl(prompt)
-    };
+Return the response in JSON format with a top-level key named "concepts" and an array of three objects, each containing "title", "description", and "prompt".`;
   };
 
-  const renderPollinationsFallback = (designs) => {
+  const renderGeminiConcepts = (concepts) => {
     if (!resultShell) return;
 
-    const html = designs.map((design) => `
+    const html = concepts.map((concept) => `
       <div class="visualizer-concept-card">
-        <div class="visualizer-concept-title">${escapeHtml(design.title)}</div>
-        <img src="${escapeHtml(design.imageUrl)}" alt="Dream cake preview" class="visualizer-pollinations-img">
+        <div class="visualizer-concept-title">${escapeHtml(concept.title)}</div>
+        <div class="visualizer-concept-description">${escapeHtml(concept.description)}</div>
+        ${concept.imageUrl ? `
+          <div class="visualizer-image-wrapper">
+            <img src="${escapeHtml(concept.imageUrl)}" alt="${escapeHtml(concept.title)}" class="visualizer-generated-image" />
+          </div>
+        ` : ''}
         <div class="visualizer-prompt-block">
-          <div class="prompt-label">Image prompt</div>
-          <div class="prompt-text">${escapeHtml(design.promptText)}</div>
+          <div class="prompt-label">AI image prompt</div>
+          <div class="prompt-text">${escapeHtml(concept.prompt)}</div>
           <div class="prompt-actions">
             <button type="button" class="copy-prompt-btn">📋 Copy Image Prompt</button>
-          </div>
-          <div class="prompt-links">
-            <a class="prompt-link-btn" href="${escapeHtml(design.imageUrl)}" target="_blank" rel="noopener">🧪 Try on Pollinations.ai</a>
-            <a class="prompt-link-btn" href="https://app.leonardo.ai" target="_blank" rel="noopener">🎨 Try on Leonardo.ai</a>
-            <a class="prompt-link-btn" href="https://firefly.adobe.com" target="_blank" rel="noopener">🖼️ Try on Adobe Firefly</a>
-            <a class="prompt-link-btn" href="https://ideogram.ai" target="_blank" rel="noopener">🤖 Try on Ideogram</a>
           </div>
         </div>
       </div>
     `).join('');
 
-    const whatsappHref = buildWhatsAppLink('Design 1');
+    const whatsappHref = buildWhatsAppLink(concepts[0]?.title || 'Concept 1');
+
+    resultShell.innerHTML = `
+      <div class="visualizer-result-card">
+        ${html}
+        <div class="visualizer-result-actions">
+          <a id="visualizerWhatsAppBtn" class="visualizer-wa-share" target="_blank" rel="noopener" href="${escapeHtml(whatsappHref)}">📲 Send This Design to Craveessa on WhatsApp</a>
+          <button type="button" id="visualizerTryAgain" class="visualizer-try-again">🔄 Try Again with Different Inputs</button>
+        </div>
+      </div>
+    `;
+  };
+
+  const renderGeminiImages = (images) => {
+    if (!resultShell) return;
+
+    const html = images.map((image, index) => `
+      <div class="visualizer-concept-card">
+        <div class="visualizer-concept-title">Design ${index + 1}</div>
+        <div class="visualizer-image-wrapper">
+          <img src="${escapeHtml(image.url)}" alt="AI cake design ${index + 1}" class="visualizer-generated-image" />
+        </div>
+        <div class="visualizer-prompt-block">
+          <div class="prompt-label">Generated prompt</div>
+          <div class="prompt-text">${escapeHtml(image.prompt || '')}</div>
+          <div class="prompt-actions">
+            <button type="button" class="copy-prompt-btn">📋 Copy Prompt</button>
+          </div>
+        </div>
+      </div>
+    `).join('');
+
+    const whatsappHref = buildWhatsAppLink('AI Cake Design');
 
     resultShell.innerHTML = `
       <div class="visualizer-result-card">
@@ -823,25 +895,15 @@ document.addEventListener('DOMContentLoaded', () => {
       clearInterval(loadingInterval);
       loadingInterval = null;
     }
+    // Respect any active cooldown when enabling the button
     if (generateBtn) {
-      generateBtn.disabled = false;
+      runCooldownTimer(generateBtn);
     }
   };
 
   const getSelectedTier = () => {
     const active = tierButtons.find((btn) => btn.classList.contains('active'));
     return active ? active.dataset.value : '1 Tier';
-  };
-
-  const buildUserPrompt = () => {
-    return `Cake Weight: ${cakeWeight.value}
-Number of Tiers: ${getSelectedTier()}
-Theme: ${themeInput.value.trim() || 'No theme specified'}
-Flavor: ${flavorSelect.value}
-Occasion: ${occasionSelect.value}
-Color Preference: ${colorPrefInput.value.trim() || 'Surprise me'}
-Special Requests: ${specialRequests.value.trim() || 'No special requests'}
-`;
   };
 
   const buildWhatsAppLink = (conceptTitle) => {
@@ -980,6 +1042,9 @@ Special Requests: ${specialRequests.value.trim() || 'No special requests'}
     }
   };
 
+  // Resume any active cooldown on load
+  try { runCooldownTimer(generateBtn); } catch (e) { /* ignore */ }
+
   generateBtn.addEventListener('click', async () => {
     if (!resultShell || !generateBtn) return;
     errorEl.textContent = '';
@@ -987,18 +1052,33 @@ Special Requests: ${specialRequests.value.trim() || 'No special requests'}
 
     try {
       const meta = buildPromptMeta();
-      const styles = [
-        'soft sugar flower accents and pearl details',
-        'modern brushstroke lines with metallic finishes',
-        'classic layered elegance with luxurious frosting highlights'
-      ];
-      const concepts = [0, 1, 2].map((index) => buildConceptCard(index, meta, styles[index]));
-      await new Promise((resolve) => setTimeout(resolve, 1200));
-      renderPollinationsFallback(concepts);
+      const response = await fetch('/api/gemini-design', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(meta)
+      });
+
+      const result = await response.json();
+      if (!response.ok) {
+        throw new Error(result.error || 'Unable to generate cake concepts');
+      }
+
+      if (result.images && Array.isArray(result.images)) {
+        renderGeminiImages(result.images);
+      } else if (result.concepts && Array.isArray(result.concepts)) {
+        renderGeminiConcepts(result.concepts);
+      } else {
+        throw new Error(result.error || 'Invalid Gemini response');
+      }
     } catch (err) {
-      showErrorMessage('Something went wrong — but don\'t worry! WhatsApp us your cake idea and we\'ll design it for you 💬');
+      console.error(err);
+      showErrorMessage('Something went wrong generating your cake concepts. Please try again or contact us directly on WhatsApp.');
     } finally {
       hideLoadingState();
+      // Start cooldown after each attempt to prevent rapid re-tries
+      try { startCooldown(generateBtn, COOLDOWN_SECONDS); } catch (e) { /* ignore */ }
     }
   });
 
