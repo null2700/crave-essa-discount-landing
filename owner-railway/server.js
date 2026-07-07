@@ -145,8 +145,229 @@ const upload = multer({
   }
 });
 
+const buildGeminiDesignPrompt = (meta) => {
+  return `Create three distinct luxury cake design concepts for a premium cake studio.
+Use these details:
+- Weight: ${meta.weight || '250g'}
+- Tiers: ${meta.tier || '1 Tier'}
+- Theme: ${meta.theme || 'Elegant celebration'}
+- Flavor: ${meta.flavor || 'Chocolate'}
+- Occasion: ${meta.occasion || 'Birthday'}
+- Colors: ${meta.color || 'soft blush and cream'}
+- Special requests: ${meta.special || 'No special requests'}
+
+- Keep each "description" under 60 words and each "prompt" under 50 words.
+
+For each concept, produce an object with keys:
+- title: a short name for the concept
+- description: a concise, vivid design description
+- prompt: one strong image prompt in quotes suitable for photorealistic cake generation
+
+Return only valid JSON with a top-level "concepts" array containing three objects.`;
+};
+
+const fetchGeminiResponse = (apiKey, prompt, model, wantImage = false) => {
+  return new Promise((resolve, reject) => {
+    const resolvedModel = model || process.env.GEMINI_MODEL || 'gemini-2.5-flash';
+    const url = new URL(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(resolvedModel)}:generateContent?key=${encodeURIComponent(apiKey)}`);
+
+    const payload = {
+      contents: [{ parts: [{ text: prompt }] }],
+      generationConfig: wantImage
+        ? { responseModalities: ['TEXT', 'IMAGE'] }
+        : { temperature: 0.8, maxOutputTokens: 4096 }
+    };
+
+    const body = JSON.stringify(payload);
+    const options = {
+      method: 'POST',
+      hostname: url.hostname,
+      path: url.pathname + url.search,
+      headers: {
+        'Content-Type': 'application/json',
+        'Content-Length': Buffer.byteLength(body)
+      }
+    };
+
+    const req = https.request(options, (res) => {
+      let responseText = '';
+      res.on('data', (chunk) => { responseText += chunk; });
+      res.on('end', () => {
+        try {
+          const parsed = JSON.parse(responseText);
+          if (res.statusCode >= 400) {
+            const error = new Error(parsed.error?.message || `Gemini error ${res.statusCode}`);
+            error.statusCode = res.statusCode;
+            error.body = parsed;
+            return reject(error);
+          }
+          resolve(parsed);
+        } catch (parseErr) {
+          reject(parseErr);
+        }
+      });
+    });
+
+    req.on('error', reject);
+    req.write(body);
+    req.end();
+  });
+};
+
+const tryParseJsonLoose = (text) => {
+  if (!text || typeof text !== 'string') return null;
+  const trimmed = text.trim();
+  try {
+    return JSON.parse(trimmed);
+  } catch (e) {
+    const jsonMatch = trimmed.match(/\{[\s\S]*\}/);
+    if (!jsonMatch) return null;
+    let candidate = jsonMatch[0];
+    candidate = candidate.replace(/,\s*(?=[}\]])/g, '');
+    candidate = candidate.replace(/'/g, '"');
+    candidate = candidate.replace(/([,\{\s])(\w+)\s*:/g, '$1"$2":');
+    try {
+      return JSON.parse(candidate);
+    } catch (e2) {
+      return null;
+    }
+  }
+};
+
+function extractJson(text) {
+  text = (text || '').trim();
+  const match = text.match(/\{[\s\S]*\}/);
+  if (!match) throw new Error('No JSON found');
+  return JSON.parse(match[0]);
+}
+
+const fetchHuggingFaceImage = (prompt) => {
+  return new Promise((resolve, reject) => {
+    const hfKey = process.env.HF_API_KEY;
+    if (!hfKey) {
+      return reject(new Error('HF_API_KEY is not configured on the server.'));
+    }
+
+    const payload = JSON.stringify({ inputs: prompt });
+    const options = {
+      method: 'POST',
+      hostname: 'router.huggingface.co',
+      path: '/hf-inference/models/black-forest-labs/FLUX.1-schnell',
+      headers: {
+        'Authorization': `Bearer ${hfKey}`,
+        'Content-Type': 'application/json',
+        'Content-Length': Buffer.byteLength(payload)
+      }
+    };
+
+    const req = https.request(options, (res) => {
+      const chunks = [];
+      res.on('data', (chunk) => chunks.push(chunk));
+      res.on('end', () => {
+        const buffer = Buffer.concat(chunks);
+        const contentType = res.headers['content-type'] || '';
+        if (contentType.includes('application/json')) {
+          try {
+            const errJson = JSON.parse(buffer.toString('utf8'));
+            const error = new Error(errJson.error || `HF error ${res.statusCode}`);
+            error.statusCode = res.statusCode;
+            error.body = errJson;
+            return reject(error);
+          } catch (e) {
+            return reject(new Error(`HF error ${res.statusCode}: ${buffer.toString('utf8')}`));
+          }
+        }
+        if (res.statusCode >= 400) {
+          return reject(new Error(`HF error ${res.statusCode}`));
+        }
+        resolve(`data:image/png;base64,${buffer.toString('base64')}`);
+      });
+    });
+
+    req.on('error', reject);
+    req.write(payload);
+    req.end();
+  });
+};
+
 // Health check
 app.get('/health', (req, res) => res.json({ ok: true }));
+
+app.post('/api/gemini-design', async (req, res) => {
+  try {
+    const apiKey = process.env.GEMINI_API_KEY;
+    if (!apiKey) {
+      return res.status(500).json({ ok: false, error: 'GEMINI_API_KEY is not configured on the server.' });
+    }
+
+    const meta = req.body || {};
+    const textModel = 'gemini-2.5-flash';
+    const imageModel = 'gemini-2.5-flash-image';
+
+    const prompt = buildGeminiDesignPrompt(meta);
+    const geminiResponse = await fetchGeminiResponse(apiKey, prompt, textModel, false);
+
+    const candidate = Array.isArray(geminiResponse.candidates) ? geminiResponse.candidates[0] : null;
+    const textOutput = candidate?.content?.parts?.map((p) => p.text || '').join('') || '';
+
+    let parsed = tryParseJsonLoose(textOutput);
+    if (!parsed || !Array.isArray(parsed.concepts)) {
+      try {
+        parsed = extractJson(textOutput);
+      } catch (e) {
+        console.error('Failed to extract/validate JSON from Gemini output (loose+strict):', e && e.message);
+        parsed = null;
+      }
+    }
+
+    if (!parsed || !Array.isArray(parsed.concepts)) {
+      console.error('Gemini response did not include concepts array. Full text:', textOutput);
+      return res.status(500).json({ ok: false, error: 'Unable to parse Gemini response. Please try again later.' });
+    }
+
+    const concepts = parsed.concepts.slice(0, 3).map((concept) => ({
+      title: String(concept.title || '').trim() || 'Cake Design',
+      description: String(concept.description || '').trim() || 'Beautiful cake visualization concept.',
+      prompt: String(concept.prompt || '').trim() || ''
+    }));
+
+    for (const concept of concepts) {
+      let gotImage = false;
+      try {
+        const imgResponse = await fetchGeminiResponse(apiKey, concept.prompt, imageModel, true);
+        const imgCandidate = Array.isArray(imgResponse.candidates) ? imgResponse.candidates[0] : imgResponse.candidates?.[0] || null;
+        const imagePart = imgCandidate?.content?.parts?.find((p) => p.inlineData);
+        if (imagePart?.inlineData) {
+          concept.imageUrl = `data:${imagePart.inlineData.mimeType};base64,${imagePart.inlineData.data}`;
+          gotImage = true;
+        }
+      } catch (imgErr) {
+        const statusCode = imgErr && imgErr.statusCode;
+        const bodyErr = imgErr && imgErr.body && imgErr.body.error;
+        const message = imgErr && (imgErr.message || (bodyErr && bodyErr.message) || '');
+        const isQuota = statusCode === 429 || (bodyErr && bodyErr.status === 'RESOURCE_EXHAUSTED') || /quota|Quota exceeded|RESOURCE_EXHAUSTED|rate limit/i.test(message);
+        console.error('Gemini image generation issue for concept:', concept.title, message);
+        if (isQuota) {
+          console.warn('Gemini image quota/rate limit hit');
+        }
+      }
+
+      if (!gotImage) {
+        try {
+          concept.imageUrl = await fetchHuggingFaceImage(concept.prompt);
+        } catch (hfErr) {
+          console.error('HuggingFace image generation failed for concept:', concept.title, hfErr && (hfErr.body || hfErr.message));
+          concept.imageUrl = null;
+        }
+      }
+    }
+
+    res.json({ ok: true, concepts });
+  } catch (err) {
+    console.error('Gemini design generation error', err);
+    res.status(500).json({ ok: false, error: 'Gemini design generation failed. Please try again later.' });
+  }
+});
 
 // Owner credentials are fixed and cannot be changed through the website.
 const OWNER_USERNAME = 'srushti';
