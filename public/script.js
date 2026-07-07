@@ -1060,9 +1060,20 @@ Return the response in JSON format with a top-level key named "concepts" and an 
         body: JSON.stringify(meta)
       });
 
-      const result = await response.json();
+      let result = {};
+      const responseText = await response.text();
+      if (responseText) {
+        try {
+          result = JSON.parse(responseText);
+        } catch (parseError) {
+          result = {
+            error: responseText
+          };
+        }
+      }
+
       if (!response.ok) {
-        throw new Error(result.error || 'Unable to generate cake concepts');
+        throw new Error(result.error || result.message || 'Unable to generate cake concepts');
       }
 
       if (result.images && Array.isArray(result.images)) {
@@ -1070,7 +1081,7 @@ Return the response in JSON format with a top-level key named "concepts" and an 
       } else if (result.concepts && Array.isArray(result.concepts)) {
         renderGeminiConcepts(result.concepts);
       } else {
-        throw new Error(result.error || 'Invalid Gemini response');
+        throw new Error(result.error || result.message || 'Invalid Gemini response');
       }
     } catch (err) {
       console.error(err);
