@@ -126,10 +126,7 @@ const initSqlite = () => {
 };
 
 const initMongo = async () => {
-  mongoClient = new MongoClient(MONGODB_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-  });
+  mongoClient = new MongoClient(MONGODB_URI);
 
   await mongoClient.connect();
   mongoDb = mongoClient.db(MONGODB_DBNAME);
